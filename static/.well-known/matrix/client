@@ -1,5 +1,5 @@
 {
 	"m.homeserver": {
-		"base_url": "https://m.cwel.sh/"
+		"base_url": "https://m.cwel.sh:8008"
 	}
 }
