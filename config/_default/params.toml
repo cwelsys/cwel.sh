@@ -100,7 +100,6 @@ cardViewScreenWidth = false
 [umamiAnalytics]
 websiteid = "803558a7-dd24-47ba-b49c-a329b71c106a"
 domain = "anal.cwel.sh"
-scriptName = "https://anal.cwel.sh/script.js"
 enableTrackEvent = true
 [selineAnalytics]
 
