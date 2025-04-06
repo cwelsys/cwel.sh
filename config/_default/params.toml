@@ -72,7 +72,7 @@ cardViewScreenWidth = false
 constrainItemsWidth = false
 
 [sitemap]
-excludedKinds = [ "taxonomy", "term" ]
+excludedKinds = ["taxonomy", "term"]
 
 [taxonomy]
 showTermCount = true
@@ -98,7 +98,7 @@ cardViewScreenWidth = false
 [fathomAnalytics]
 
 [umamiAnalytics]
-
+<script defer src="https://cloud.umami.is/script.js" data-website-id="0f0e6421-0e57-4ab4-8b57-8b018036bc13"></script>
 [selineAnalytics]
 
 [buymeacoffee]
