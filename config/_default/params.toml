@@ -98,8 +98,8 @@ cardViewScreenWidth = false
 [fathomAnalytics]
 
 [umamiAnalytics]
-websiteid = "803558a7-dd24-47ba-b49c-a329b71c106a"
-domain = "anal.cwel.sh"
+websiteid = "b9b5ee6a-75b6-4620-990b-ff2fb6697c3c"
+domain = "umami.cwel.sh"
 enableTrackEvent = true
 [selineAnalytics]
 
