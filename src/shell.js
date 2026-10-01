@@ -14,36 +14,10 @@ const files = {
   resume: `<a href="/resume">/resume</a>  <a href="/resume.pdf">/resume.pdf</a>`,
   keys: `<a href="/cwel.asc">/cwel.asc</a>\ngpg --locate-keys ${esc(email)}`,
 };
-const logos = {
-  Firefox: `   .-""""-.
-  / .-==-. \\
- | | (o)  | |
- | |  __  | |
-  \\ '-..-' /
-   '-....-'`,
-  Chrome: `   .------.
-  / .----. \\
- | |  ()  | |
- | '.----.' |
-  \\        /
-   '------'`,
-  Safari: `   .------.
-  /   /\\   \\
- |   /  \\   |
- |   \\  /   |
-  \\   \\/   /
-   '------'`,
-  Edge: `   .------.
-  /  ____  \\
- |  / __ \\  |
- | | (__/   |
-  \\ \\____  /
-   '------'`,
-  Browser: `  .--------.
+const logo = `  .--------.
   |  >_    |
   |        |
-  '--------'`,
-};
+  '--------'`;
 function browser() {
   const ua = navigator.userAgent;
   for (const [n, re] of [['Edge', /Edg\/(\d+)/], ['Firefox', /Firefox\/(\d+)/], ['Chrome', /Chrome\/(\d+)/], ['Safari', /Version\/(\d+).*Safari/]]) {
@@ -63,10 +37,10 @@ function fetch_() {
     ['Font', 'yours'], ['Term', `${n} ${v}`.trim()], ['Locale', navigator.language],
     ['<span class="err">●</span><span class="p">●</span><span class="y">●</span><span class="g">●</span><span class="d">●</span><span class="k">●</span>'],
   ];
-  const logo = logos[n].split('\n');
-  const w = Math.max(...logo.map(l => l.length)) + 3;
+  const lines = logo.split('\n');
+  const w = Math.max(...lines.map(l => l.length)) + 3;
   return rows.map((r, i) =>
-    `<span aria-hidden="true">${esc((logo[i] ?? '').padEnd(w))}</span>` +
+    `<span aria-hidden="true">${esc((lines[i] ?? '').padEnd(w))}</span>` +
     (r.length === 2 ? `<span class="y">${r[0].padEnd(8)}</span> ${esc(r[1])}` : r[0])
   ).join('\n');
 }

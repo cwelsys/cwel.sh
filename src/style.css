@@ -12,7 +12,10 @@ body {
 pre { font: inherit; margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 a { color: var(--blue); text-decoration: none; }
 a:hover, a:focus-visible { text-decoration: underline; }
-a:focus-visible, input:focus-visible { outline: 2px solid var(--peach); outline-offset: 2px; }
+a:focus-visible { outline: 2px solid var(--peach); outline-offset: 2px; }
+input:focus { outline: none; }
+form .p { color: var(--dim); }
+form:focus-within .p { color: var(--peach); }
 ::selection { background: var(--surface); }
 .p { color: var(--peach); }
 .d { color: var(--blue); }
