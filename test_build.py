@@ -23,7 +23,7 @@ assert L["email"].startswith("mailto:")
 
 page = build.resume_html(resume)
 assert resume["basics"]["name"] in page
-assert resume["basics"]["phone"] not in page
+assert not resume["basics"]["phone"], "phone must stay out of the public repo"
 assert "<p>" not in page.split("<ul>")[1].split("</ul>")[0]
 assert "<h2>Open Source</h2>" in page and page.index("<h2>Open Source</h2>") < page.index("<h2>Projects</h2>")
 assert 'href="https://github.com/kovidgoyal/kitty/pull/10094">kitty</a>' in page
