@@ -24,7 +24,7 @@ form:focus-within .p { color: var(--peach); }
 .k { color: var(--mauve); }
 .g { color: var(--green); }
 .y { color: var(--yellow); }
-.dim { color: var(--dim); }
+.dim { color: var(--sub); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 form { display: flex; }
 input {

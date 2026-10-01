@@ -68,6 +68,30 @@ with tempfile.TemporaryDirectory() as d:
     assert build.about_text((root / "src" / "index.html").read_text()) in txt
     assert build.about_text('<pre id="about">x &amp; y</pre>') == "x & y"
     assert "cat patches" in txt
-    assert "—" not in txt
+    assert "\u2014" not in txt
+
+js = (build.SRC / "shell.js").read_text()
+assert js.count("__proto__: null") == 3, "cmds, files and links must have null prototypes"
+
+css = (build.SRC / "style.css").read_text()
+tokens = dict(re.findall(r"--(\w+): (#[0-9a-f]{6})", css))
+
+
+def lum(hexc):
+    c = [int(hexc[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+    c = [v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4 for v in c]
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+
+
+def contrast(a, b):
+    la, lb = lum(tokens[a]), lum(tokens[b])
+    return (max(la, lb) + 0.05) / (min(la, lb) + 0.05)
+
+
+for sel, tok in re.findall(r"\n(\.\w+) \{ color: var\(--(\w+)\); \}", css):
+    assert contrast(tok, "base") >= 4.5, (sel, tok, round(contrast(tok, "base"), 2))
+
+for f in ("build.py", "test_build.py", "cwel.1", "Makefile", "src/index.html", "src/style.css", "src/shell.js", "src/404.html", "functions/index.js", ".github/workflows/deploy.yml"):
+    assert "\u2014" not in (build.ROOT / f).read_text(), f
 
 print("ok")

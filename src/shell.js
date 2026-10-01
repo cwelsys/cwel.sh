@@ -5,10 +5,11 @@ const tpl = id => document.getElementById(id).innerHTML.trim();
 const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const err = s => `<span class="err">${s}</span>`;
 const PROMPT = '<span class="d">~</span> <span class="p">❯</span>';
-const links = {};
+const links = { __proto__: null };
 for (const a of document.querySelectorAll('#ls a')) links[a.textContent] = a.getAttribute('href');
 const email = (links.email || '').replace('mailto:', '');
 const files = {
+  __proto__: null,
   about: tpl('about'),
   patches: tpl('patches'),
   resume: `<a href="/resume">/resume</a>  <a href="/resume.pdf">/resume.pdf</a>`,
@@ -45,6 +46,7 @@ function fetch_() {
   ).join('\n');
 }
 const cmds = {
+  __proto__: null,
   help: () => `commands: ${Object.keys(cmds).join('  ')}\nfiles:    ${Object.keys(files).join('  ')}`,
   ls: () => tpl('ls'),
   cat: a => a.length ? a.map(f => files[f] ?? err(`cat: ${esc(f)}: No such file or directory`)).join('\n') : err('cat: missing file'),
