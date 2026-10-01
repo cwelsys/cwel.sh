@@ -7,12 +7,13 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 SRC = ROOT / "src"
 OUT = ROOT / "public"
-LS = ["about", "resume", "github", "linkedin", "email", "keys"]
+LS = ["about", "resume", "dotfiles", "github", "linkedin", "email", "pgp"]
 STRIP = re.compile(r"\x1b\[[0-9;]*m")
 FAVICON = (
     "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'>"
@@ -50,10 +51,11 @@ def custom(resume):
 
 def links(resume):
     b = resume["basics"]
-    out = {"email": "mailto:" + b["email"], "resume": "/resume", "keys": "/cwel.asc"}
+    out = {"email": "mailto:" + b["email"], "resume": "/resume", "pgp": "/cwel.asc"}
     for f in b.get("customFields", []):
         if "github" in f.get("icon", ""):
             out["github"] = f["link"]
+            out["dotfiles"] = f["link"].rstrip("/") + "/dotfiles"
         if "linkedin" in f.get("icon", ""):
             out["linkedin"] = f["link"]
     return out
@@ -196,14 +198,14 @@ def about_text(index_html):
     return text(m.group(1)) if m else ""
 
 
-def index_txt(resume, about, man):
+def index_txt(resume, about, man, login):
     L = links(resume)
-    P = f'{ansi("blue", "~")} {ansi("peach", "❯")}'
+    P = f'{ansi("blue", "~")}\n{ansi("peach", "❯")}'
     ls = "  ".join(ansi("blue", n) if n in L else n for n in LS)
     return "\n".join([
-        f"{P} cat about", about, "",
-        f"{P} ls", ls, "",
-        f"{P} man cwel", man_txt(man), "",
+        ansi("dim", f"Last login: {login} from localhost"), about,
+        f"{P} ls", ls,
+        f"{P} man cwel", man_txt(man),
         f"{P} ",
         "resume:   https://cwel.sh/resume",
         "pdf:      https://cwel.sh/resume.pdf",
@@ -242,10 +244,11 @@ def build(out=OUT, root=ROOT):
         shutil.copy(src / f, out / f)
     shutil.copy(root / "cwel.1", out / "cwel.1")
     man = man_text(root)
+    login = time.ctime()
     index = (src / "index.html").read_text()
-    page = index.replace("{{ls}}", ls_html(resume)).replace("{{man}}", man_html(man))
+    page = index.replace("{{login}}", login).replace("{{ls}}", ls_html(resume)).replace("{{man}}", man_html(man))
     (out / "index.html").write_text(page)
-    (out / "index.txt").write_text(index_txt(resume, about_text(index), man))
+    (out / "index.txt").write_text(index_txt(resume, about_text(index), man, login))
     (out / "resume" / "index.html").write_text(resume_html(resume))
     write_keys(out, resume["basics"]["email"], root)
 

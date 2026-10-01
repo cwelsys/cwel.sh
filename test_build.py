@@ -44,7 +44,7 @@ with tempfile.TemporaryDirectory() as d:
         (root / "src" / f).write_text(src.read_text() if src.exists() else "")
     idx = build.SRC / "index.html"
     (root / "src" / "index.html").write_text(idx.read_text() if idx.exists() else
-        '<pre id="about">x &amp; y</pre><pre id="ls">{{ls}}</pre>{{man}}')
+        '<pre id="login">{{login}} from localhost</pre><pre id="about">x &amp; y</pre><pre id="ls">{{ls}}</pre>{{man}}')
     shutil.copy(build.ROOT / "cwel.1", root / "cwel.1")
     shutil.copy(build.ROOT / "cwel.asc", root / "cwel.asc")
     out = root / "public"
@@ -74,7 +74,11 @@ with tempfile.TemporaryDirectory() as d:
     assert "NAME" in txt and "SEE ALSO" in txt
     assert build.about_text((root / "src" / "index.html").read_text()) in txt
     assert build.about_text('<pre id="about">x &amp; y</pre>') == "x & y"
-    assert "cat patches" not in txt
+    assert "cat patches" not in txt and "keys" not in txt
+    assert "Last login: " in txt and "from localhost" in txt
+    html = files["index.html"].read_text()
+    assert "from localhost" in html and 'href="/cwel.asc">pgp</a>' in html and ">dotfiles</a>" in html
+    assert "{{" not in html and "{{" not in txt
     assert "\u2014" not in txt
 
 js = (build.SRC / "shell.js").read_text()

@@ -4,7 +4,9 @@ const form = document.getElementById('f');
 const tpl = id => document.getElementById(id).innerHTML.trim();
 const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const err = s => `<span class="err">${s}</span>`;
-const PROMPT = '<span class="d">~</span> <span class="p">❯</span>';
+const PROMPT = '<span class="d">~</span>\n<span class="p">❯</span>';
+const BORN = Date.UTC(1994, 9, 7);
+const colo = (/from (\S+)/.exec(document.getElementById('login').textContent) || [])[1] || 'localhost';
 const links = { __proto__: null };
 for (const a of document.querySelectorAll('#ls a')) links[a.textContent] = a.getAttribute('href');
 const email = (links.email || '').replace('mailto:', '');
@@ -12,7 +14,7 @@ const files = {
   __proto__: null,
   about: tpl('about'),
   resume: `<a href="/resume">/resume</a>  <a href="/resume.pdf">/resume.pdf</a>`,
-  keys: `<a href="/cwel.asc">/cwel.asc</a>\ngpg --locate-keys ${esc(email)}`,
+  pgp: `<a href="/cwel.asc">/cwel.asc</a>\ngpg --locate-keys ${esc(email)}`,
 };
 const logo = `  .--------.
   |  >_    |
@@ -26,14 +28,19 @@ function browser() {
   }
   return ['Browser', ''];
 }
+function uptime() {
+  let m = Math.floor((Date.now() - BORN) / 60000);
+  const d = Math.floor(m / 1440); m -= d * 1440;
+  const h = Math.floor(m / 60); m -= h * 60;
+  return `${d} days, ${h} hours, ${m} mins`;
+}
 function fetch_() {
   const [n, v] = browser();
-  const years = Math.floor((Date.now() - Date.UTC(1994, 0, 1)) / 31557600000);
   const rows = [
-    ['<span class="p">cwel</span>@<span class="p">cwel.sh</span>'],
-    ['<span class="dim">------------</span>'],
-    ['OS', 'cwel.sh'], ['Host', 'Cloudflare Pages'], ['Kernel', 'static html'],
-    ['Uptime', `${years} years`], ['Shell', 'sh.js'], ['Theme', 'Catppuccin Mocha'],
+    ['<span class="p">guest</span>@<span class="p">cwel.sh</span>'],
+    ['<span class="dim">-------------</span>'],
+    ['OS', 'cwel.sh'], ['Host', `Cloudflare ${colo}`], ['Kernel', 'static html'],
+    ['Uptime', uptime()], ['Shell', 'sh.js'], ['Theme', 'Catppuccin Mocha'],
     ['Font', 'yours'], ['Term', `${n} ${v}`.trim()], ['Locale', navigator.language],
     ['<span class="err">●</span><span class="p">●</span><span class="y">●</span><span class="g">●</span><span class="d">●</span><span class="k">●</span>'],
   ];
@@ -46,7 +53,15 @@ function fetch_() {
 }
 const cmds = {
   __proto__: null,
-  help: () => `commands: ${Object.keys(cmds).join('  ')}\nfiles:    ${Object.keys(files).join('  ')}`,
+  help: () => [
+    ['help', 'this'],
+    ['ls', "list what's here"],
+    ['cat FILE', `read a file: ${Object.keys(files).join(', ')}`],
+    ['cd NAME', `go there: ${Object.keys(links).join(', ')}`],
+    ['man cwel', 'the manual'],
+    ['fastfetch', 'system info'],
+    ['clear', 'clear the screen, or ctrl-l'],
+  ].map(([c, d]) => `<span class="c">${c.padEnd(10)}</span> ${esc(d)}`).join('\n'),
   ls: () => tpl('ls'),
   cat: a => a.length ? a.map(f => files[f] ?? err(`cat: ${esc(f)}: No such file or directory`)).join('\n') : err('cat: missing file'),
   cd: a => { if (!a.length) return null; const u = links[a[0]]; if (!u) return err(`cd: no such file or directory: ${esc(a[0])}`); location.href = u; return null; },
@@ -57,7 +72,7 @@ const cmds = {
   whoami: () => 'guest',
   pwd: () => '/home/cwel',
   echo: a => esc(a.join(' ')),
-  uname: () => 'Linux cwel.sh 7.2.6-1-cwel',
+  uname: () => `Linux ${esc(colo)}.cloudflare.net`,
   clear: () => { out.innerHTML = ''; return null; },
   sudo: () => err('guest is not in the sudoers file.  This incident will be reported.'),
   rm: () => err('rm: permission denied'),

@@ -11,15 +11,16 @@
 <body>
 <main>
 <output id="out" role="log" aria-live="polite">
-<pre class="cmd"><span class="d">~</span> <span class="p">❯</span> cat about</pre>
+<pre id="login" class="dim">Last login: {{login}} from localhost</pre>
 <pre id="about">Connor Welsh. Software developer in Arlington, VA.
-Accessible web software, Salesforce, and patches to the
-Linux desktop when it breaks. Emails from here are me.</pre>
-<pre class="cmd"><span class="d">~</span> <span class="p">❯</span> ls</pre>
+Emails from here are me.</pre>
+<pre class="cmd"><span class="d">~</span>
+<span class="p">❯</span> ls</pre>
 <pre id="ls">{{ls}}</pre>
 </output>
+<pre class="d" aria-hidden="true">~</pre>
 <form id="f" autocomplete="off">
-<span class="d">~</span>&nbsp;<span class="p">❯</span>&nbsp;<label class="sr" for="cmd">Command</label><input id="cmd" type="text" spellcheck="false" autocapitalize="off" aria-describedby="hint">
+<span class="p">❯</span>&nbsp;<label class="sr" for="cmd">Command</label><input id="cmd" type="text" spellcheck="false" autocapitalize="off" aria-describedby="hint">
 </form>
 <p id="hint" class="dim">type <span class="c">help</span>, or just use the links.</p>
 </main>

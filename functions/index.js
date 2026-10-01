@@ -7,7 +7,9 @@ export async function onRequestGet({ request, env }) {
   const headers = new Headers(res.headers);
   headers.set('vary', 'User-Agent');
   if (cli) headers.set('content-type', 'text/plain; charset=utf-8');
-  return new Response(res.body, { status: res.status, headers });
+  const colo = request.cf?.colo;
+  const body = colo ? (await res.text()).replace('from localhost', `from ${colo}`) : res.body;
+  return new Response(body, { status: res.status, headers });
 }
 
 export const onRequestHead = onRequestGet;
