@@ -15,11 +15,6 @@ SRC = ROOT / "src"
 OUT = ROOT / "public"
 LS = ["about", "resume", "dotfiles", "github", "linkedin", "email", "pgp"]
 STRIP = re.compile(r"\x1b\[[0-9;]*m")
-FAVICON = (
-    "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'>"
-    "<rect width='16' height='16' fill='%231e1e2e'/>"
-    "<text x='3' y='13' font-size='13' fill='%23fab387' font-family='monospace'>%E2%9D%AF</text></svg>"
-)
 
 
 def load(path=ROOT / "resume.json"):
@@ -67,7 +62,7 @@ PAGE = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
-<link rel="icon" href="{favicon}">
+<link rel="icon" href="/favicon.svg">
 <link rel="stylesheet" href="../style.css">
 </head>
 <body class="resume">
@@ -138,7 +133,7 @@ def resume_html(resume):
     if ed:
         parts.append("<section><h2>Education</h2>" + "".join(
             "<article>" + _row(h(e["area"]), e["period"], _link(e["school"], e.get("website"))) + "</article>" for e in ed) + "</section>")
-    return PAGE.format(title=h(b["name"]) + " resume", favicon=FAVICON, body=head + "".join(parts))
+    return PAGE.format(title=h(b["name"]) + " resume", body=head + "".join(parts))
 
 
 ANSI = {
@@ -240,7 +235,7 @@ def build(out=OUT, root=ROOT):
     if out.exists():
         shutil.rmtree(out)
     (out / "resume").mkdir(parents=True)
-    for f in ("style.css", "shell.js", "logos.js", "nf.woff2", "braille.woff2", "404.html", "_headers"):
+    for f in ("style.css", "shell.js", "logos.js", "nf.woff2", "braille.woff2", "favicon.svg", "404.html", "_headers"):
         shutil.copy(src / f, out / f)
     shutil.copy(root / "cwel.1", out / "cwel.1")
     man = man_text(root)
