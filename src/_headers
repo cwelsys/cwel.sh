@@ -7,3 +7,7 @@
 /.well-known/openpgpkey/*
   Access-Control-Allow-Origin: *
   Content-Type: application/octet-stream
+/shell.js
+  Cache-Control: public, max-age=0, must-revalidate
+/style.css
+  Cache-Control: public, max-age=0, must-revalidate

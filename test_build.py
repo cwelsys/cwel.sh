@@ -102,3 +102,7 @@ for f in ("build.py", "test_build.py", "cwel.1", "Makefile", "src/index.html", "
     assert "\u2014" not in (build.ROOT / f).read_text(), f
 
 print("ok")
+
+headers = (build.SRC / "_headers").read_text()
+for asset in ("/shell.js", "/style.css"):
+    assert re.search(rf"^{re.escape(asset)}\n  Cache-Control: public, max-age=0, must-revalidate", headers, re.M), asset
