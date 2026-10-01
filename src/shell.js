@@ -89,11 +89,11 @@ const cmds = {
   uname: async () => { const s = await sys(); return esc(`${s.server} ${s.host} ${s.proto}`); },
   clear: () => { out.innerHTML = ''; return null; },
   sudo: () => err('guest is not in the sudoers file.  This incident will be reported.'),
-  rm: () => err('rm: permission denied'),
-  exit: () => 'logout',
-  vim: () => 'nvim',
-  nvim: () => '<span class="dim">:q</span>',
-  emacs: () => '<span class="dim">no.</span>',
+  rm: a => { const f = a.filter(x => !x.startsWith('-')); return err(f.length ? f.map(x => `rm: cannot remove '${esc(x)}': Permission denied`).join('\n') : "rm: missing operand\nTry 'rm --help' for more information."); },
+  exit: () => { close(); for (const el of [form.previousElementSibling, form, document.getElementById('hint')]) el.remove(); return `Connection to ${esc(location.hostname)} closed.`; },
+  nvim: () => go('https://github.com/cwelsys/dotfiles/tree/main/dot_config/nvim'),
+  vim: () => cmds.nvim(),
+  vi: () => cmds.nvim(),
 };
 const hist = [];
 let hi = 0;
