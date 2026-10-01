@@ -1,4 +1,5 @@
 import json
+import posixpath
 import re
 import shutil
 import tempfile
@@ -57,7 +58,8 @@ with tempfile.TemporaryDirectory() as d:
         for href in set(re.findall(r'href="([^"#]+)"', files[page].read_text())):
             if href.startswith(("http", "mailto:", "data:")):
                 continue
-            t = href.lstrip("/") or "index.html"
+            t = posixpath.normpath(posixpath.join(posixpath.dirname(page), href)) if not href.startswith("/") else href.lstrip("/")
+            t = t or "index.html"
             assert t in files or t + "/index.html" in files or t == "resume.pdf", (page, href)
     txt = files["index.txt"].read_text()
     for line in txt.splitlines():

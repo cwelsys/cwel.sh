@@ -71,7 +71,7 @@ PAGE = """<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <link rel="icon" href="{favicon}">
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="../style.css">
 </head>
 <body class="resume">
 <main>
