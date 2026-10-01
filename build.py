@@ -235,12 +235,13 @@ def zb32(data):
 def write_keys(out, email, root=ROOT):
     asc = root / "cwel.asc"
     shutil.copy(asc, out / "cwel.asc")
-    local = email.split("@")[0].lower()
-    wkd = out / ".well-known" / "openpgpkey"
-    (wkd / "hu").mkdir(parents=True)
-    (wkd / "policy").write_text("")
+    local, domain = email.lower().split("@")
+    name = zb32(hashlib.sha1(local.encode()).digest())
     binary = subprocess.run(["gpg", "--dearmor"], input=asc.read_bytes(), capture_output=True, check=True).stdout
-    (wkd / "hu" / zb32(hashlib.sha1(local.encode()).digest())).write_bytes(binary)
+    for base in (out / ".well-known" / "openpgpkey", out / ".well-known" / "openpgpkey" / domain):
+        (base / "hu").mkdir(parents=True)
+        (base / "policy").write_text("")
+        (base / "hu" / name).write_bytes(binary)
 
 
 def build(out=OUT, root=ROOT):

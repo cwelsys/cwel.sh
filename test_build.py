@@ -50,6 +50,10 @@ with tempfile.TemporaryDirectory() as d:
     for f in ("index.html", "index.txt", "resume/index.html", "cwel.1", "_headers", "404.html", "style.css", "shell.js", "cwel.asc", ".well-known/openpgpkey/policy"):
         assert f in files, f
     assert len([f for f in files if f.startswith(".well-known/openpgpkey/hu/")]) == 1
+    domain = resume["basics"]["email"].split("@")[1]
+    assert f".well-known/openpgpkey/{domain}/policy" in files
+    direct = [f for f in files if f.startswith(".well-known/openpgpkey/hu/")][0]
+    assert direct.replace("openpgpkey/hu/", f"openpgpkey/{domain}/hu/") in files
     phone = resume["basics"]["phone"]
     if phone:
         for p in files.values():
