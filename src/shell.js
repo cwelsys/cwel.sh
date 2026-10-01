@@ -4,6 +4,7 @@ const form = document.getElementById('f');
 const tpl = id => document.getElementById(id).innerHTML.trim();
 const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const err = s => `<span class="err">${s}</span>`;
+const go = u => { location.href = u; return null; };
 const PROMPT = '<span class="d">~</span>\n<span class="p">❯</span>';
 const login = document.getElementById('login');
 const BOOT = Date.parse(login.dataset.built) || Date.now();
@@ -72,8 +73,13 @@ const cmds = {
   ].map(([c, d]) => `<span class="c">${c.padEnd(10)}</span> ${esc(d)}`).join('\n'),
   ls: () => tpl('ls'),
   cat: a => a.length ? a.map(f => files[f] ?? err(`cat: ${esc(f)}: No such file or directory`)).join('\n') : err('cat: missing file'),
-  cd: a => { if (!a.length) return null; const u = links[a[0]]; if (!u) return err(`cd: no such file or directory: ${esc(a[0])}`); location.href = u; return null; },
+  cd: a => !a.length ? null : links[a[0]] ? go(links[a[0]]) : err(`cd: no such file or directory: ${esc(a[0])}`),
   open: a => cmds.cd(a),
+  cwel: a => !a.length ? tpl('man') : a[0].startsWith('--') && links[a[0].slice(2)] ? go(links[a[0].slice(2)]) : err(`cwel: unrecognized option '${esc(a[0])}'`),
+  jellyfin: () => go('https://jelly.cwel.sh'),
+  plex: () => cmds.jellyfin(),
+  seerr: () => go('https://req.cwel.sh'),
+  requests: () => cmds.seerr(),
   man: a => !a.length ? "What manual page do you want?\nFor example, try 'man cwel'." : ['cwel', 'cwel.sh', 'man'].includes(a[0]) ? tpl('man') : err(`No manual entry for ${esc(a[0])}`),
   fastfetch: () => fetch_(),
   neofetch: () => fetch_(),
@@ -114,7 +120,7 @@ form.addEventListener('submit', e => {
 input.addEventListener('keydown', e => {
   if (e.key === 'ArrowUp' && hi > 0) { input.value = hist[--hi]; e.preventDefault(); }
   else if (e.key === 'ArrowDown') { hi = Math.min(hi + 1, hist.length); input.value = hist[hi] ?? ''; e.preventDefault(); }
-  else if (e.key === 'Tab') {
+  else if (e.key === 'Tab' && !e.shiftKey && input.value.trim()) {
     const parts = input.value.split(/\s+/);
     const last = parts.pop();
     const pool = parts.length ? Object.keys({ ...files, ...links }) : Object.keys(cmds);
