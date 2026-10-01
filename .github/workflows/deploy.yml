@@ -1,0 +1,24 @@
+name: deploy
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y groff bsdextrautils
+      - run: make check
+      - run: make build
+      - run: make pdf CHROME=google-chrome
+      - uses: actions/upload-artifact@v4
+        with:
+          name: public
+          path: public
+      - if: github.ref == 'refs/heads/main'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy public --project-name=${{ vars.CF_PAGES_PROJECT }}

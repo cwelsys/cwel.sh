@@ -1,0 +1,9 @@
+/cwel.1
+  Content-Type: text/plain; charset=utf-8
+/index.txt
+  Content-Type: text/plain; charset=utf-8
+/cwel.asc
+  Content-Type: text/plain; charset=utf-8
+/.well-known/openpgpkey/*
+  Access-Control-Allow-Origin: *
+  Content-Type: application/octet-stream
