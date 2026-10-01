@@ -135,7 +135,7 @@ def resume_html(resume):
     ed = items(resume, "education")
     if ed:
         parts.append("<section><h2>Education</h2>" + "".join(
-            f'<p class="item"><b>{h(e["area"])}</b> {_link(e["school"], e.get("website"))} · {h(e["period"])}</p>' for e in ed) + "</section>")
+            "<article>" + _row(h(e["area"]), e["period"], _link(e["school"], e.get("website"))) + "</article>" for e in ed) + "</section>")
     return PAGE.format(title=h(b["name"]) + " resume", favicon=FAVICON, body=head + "".join(parts))
 
 

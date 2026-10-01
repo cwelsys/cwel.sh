@@ -28,7 +28,7 @@ assert "<p>" not in page.split("<ul>")[1].split("</ul>")[0]
 assert "<h2>Open Source</h2>" in page and page.index("<h2>Open Source</h2>") < page.index("<h2>Projects</h2>")
 assert 'href="https://github.com/kovidgoyal/kitty/pull/10094">kitty</a>' in page
 assert "Owner" in page and "Registered Apprenticeship" not in page
-assert page.count('<div class="row">') == len(build.items(resume, "experience"))
+assert page.count('<div class="row">') == len(build.items(resume, "experience")) + len(build.items(resume, "education"))
 
 r = json.loads(json.dumps(resume))
 r["sections"]["experience"]["items"][0]["hidden"] = True
