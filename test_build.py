@@ -77,7 +77,7 @@ with tempfile.TemporaryDirectory() as d:
     assert "cat patches" not in txt and "keys" not in txt
     assert "Last login: " in txt and "from localhost" in txt
     html = files["index.html"].read_text()
-    assert "from localhost" in html and 'href="/cwel.asc">pgp</a>' in html and ">dotfiles</a>" in html
+    assert "from localhost" in html and 'href="/cwel.asc">pgp</a>' in html and '<pre id="ls"><a href="/resume">resume</a>' in html
     assert "{{" not in html and "{{" not in txt
     assert re.search(r'data-built="\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ"', html)
     assert "\u2014" not in txt

@@ -13,7 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 SRC = ROOT / "src"
 OUT = ROOT / "public"
-LS = ["about", "resume", "dotfiles", "github", "linkedin", "email", "pgp"]
+LS = ["resume", "github", "linkedin", "email", "pgp"]
 STRIP = re.compile(r"\x1b\[[0-9;]*m")
 
 
@@ -50,7 +50,6 @@ def links(resume):
     for f in b.get("customFields", []):
         if "github" in f.get("icon", ""):
             out["github"] = f["link"]
-            out["dotfiles"] = f["link"].rstrip("/") + "/dotfiles"
         if "linkedin" in f.get("icon", ""):
             out["linkedin"] = f["link"]
     return out
