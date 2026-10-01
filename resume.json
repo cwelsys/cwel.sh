@@ -40,7 +40,7 @@
     "title": "",
     "columns": 1,
     "hidden": false,
-    "content": "<p>Software developer. Writing professional software since 2018, Salesforce since 2024. Open source time goes to the Linux desktop. Seeking a software development role in the DC area or remote.</p>"
+    "content": "<p>Days, web software and Salesforce automation. Nights, patching whatever is broken in my field of view.</p>"
   },
   "sections": {
     "profiles": {
@@ -73,7 +73,7 @@
           "id": "019e2763-4461-729a-8645-248efa7ae593",
           "hidden": false,
           "company": "Blind Institute of Technology",
-          "position": "Salesforce Administrator (Registered Apprenticeship)",
+          "position": "Salesforce Administrator",
           "location": "Remote",
           "period": "Aug 2025 - Present",
           "website": {
@@ -88,7 +88,7 @@
           "id": "019e2763-c365-72d4-b5fc-00e626a73561",
           "hidden": false,
           "company": "cwel Systems",
-          "position": "Solutions Architect",
+          "position": "Owner",
           "location": "McLean, VA",
           "period": "Mar 2021 - Present",
           "website": {
@@ -96,7 +96,7 @@
             "label": "",
             "inlineLink": true
           },
-          "description": "<ul><li><p>Developed trademark monitoring software that scrapes USPTO TSDR records with Selenium and detects mark usage with OpenCV feature matching and Tesseract OCR.</p></li><li><p>Administer a Microsoft 365 tenant, including Entra ID identity, Exchange Online mail security, licensing, and migration off a managed service provider.</p></li><li><p>Administer Linux hosts and containerized services, including networking, TLS, DNS, CI/CD pipelines, backups, and monitoring.</p></li></ul>",
+          "description": "<ul><li><p>Built Autopat, trademark monitoring software listed under Projects.</p></li><li><p>Administer a Microsoft 365 tenant, including Entra ID identity, Exchange Online mail security, licensing, and migration off a managed service provider.</p></li><li><p>Administer Linux hosts and containerized services, including networking, TLS, DNS, CI/CD pipelines, backups, and monitoring.</p></li></ul>",
           "roles": []
         },
         {
@@ -200,7 +200,7 @@
       ]
     },
     "projects": {
-      "title": "Open Source and Projects",
+      "title": "Projects",
       "columns": 1,
       "hidden": false,
       "items": [
@@ -217,16 +217,52 @@
           "description": "<p>Node, Express, Vercel. Express backend with HMAC-signed stateless test tokens, keyboard interaction tracking with mouse-use flags, emailed CSV results, a Vitest suite, and Vercel deployment.</p>"
         },
         {
-          "id": "01a0f497-29ea-718d-81af-1c09a2f77389",
+          "id": "72652371-b7ee-4a58-bfba-98ee27f0eb98",
           "hidden": false,
-          "name": "Open Source",
+          "name": "Autopat",
           "period": "",
           "website": {
-            "url": "https://github.com/cwelsys",
-            "label": "github.com/cwelsys",
+            "url": "https://github.com/cwelsys/TMCancel",
+            "label": "",
             "inlineLink": true
           },
-          "description": "<ul><li><p>kitty · Wayland crash hiding the titlebar on layer-shell windows (C)</p></li><li><p>gpu-screen-recorder · install the NVIDIA profile only when the driver is loaded (C++)</p></li><li><p>rmpc · MPRIS Seek, SetPosition, and Seeked for the daemon (Rust)</p></li><li><p>niri-autoselect-portal · D-Bus signature fix for position and size (Go)</p></li><li><p>topgrade · chezmoi non-standard sourceDir support (Rust)</p></li><li><p>More at github.com/cwelsys</p></li></ul>"
+          "description": "<p>Python. Trademark monitoring that scrapes USPTO TSDR records with Selenium and detects mark usage with OpenCV feature matching and Tesseract OCR.</p>"
+        },
+        {
+          "id": "a1448a64-4f76-4a72-99e0-cb48b4393bff",
+          "hidden": false,
+          "name": "komops",
+          "period": "",
+          "website": {
+            "url": "https://github.com/cwelsys/komops",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<p>Go. Syncs secrets from a 1Password vault to Komodo global variables through the 1Password CLI.</p>"
+        },
+        {
+          "id": "1f916a5a-41a1-40a6-a380-65af48f7e8ce",
+          "hidden": false,
+          "name": "cwel.sh",
+          "period": "",
+          "website": {
+            "url": "https://github.com/cwelsys/cwel.sh",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<p>Python, JavaScript. This site. A shell-session home page with no framework, a resume page generated from JSON, text output for curl, a man page, and a Web Key Directory, built and deployed by CI.</p>"
+        },
+        {
+          "id": "4cf2a7fa-cb17-48f1-a3b6-cb8155b3f43d",
+          "hidden": false,
+          "name": "nug-zen",
+          "period": "",
+          "website": {
+            "url": "https://github.com/cwelsys/nug-zen",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<p>CSS, JavaScript. A userChrome theme and userscripts for the Zen browser.</p>"
         }
       ]
     },
@@ -379,7 +415,124 @@
       "items": []
     }
   },
-  "customSections": [],
+  "customSections": [
+    {
+      "id": "df8630f6-eafb-4661-be5e-c4f9661a14b1",
+      "title": "Open Source",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "bd07a6e5-bd11-4481-8d9c-e4c92ac733b9",
+          "hidden": false,
+          "name": "kitty",
+          "period": "",
+          "website": {
+            "url": "https://github.com/kovidgoyal/kitty/pull/10094",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<p>Wayland crash hiding the titlebar on layer-shell windows (C)</p>"
+        },
+        {
+          "id": "39eb456d-c4fd-4e9e-9383-40ccc51db78c",
+          "hidden": false,
+          "name": "DankMaterialShell",
+          "period": "",
+          "website": {
+            "url": "https://github.com/AvengeMedia/DankMaterialShell/pulls?q=is%3Apr+author%3Acwelsys+is%3Amerged",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<p>Fixes across the bar, dock, OSD, display cycling, and Tailscale integration (QML, Go)</p>"
+        },
+        {
+          "id": "6ab31028-5187-412b-89d8-a73fb5d7d002",
+          "hidden": false,
+          "name": "rmpc",
+          "period": "",
+          "website": {
+            "url": "https://github.com/mierak/rmpc/pull/1022",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<p>MPRIS Seek, SetPosition, and Seeked for the daemon (Rust)</p>"
+        },
+        {
+          "id": "5d4b3867-af72-425c-9618-17b1fb41ddb9",
+          "hidden": false,
+          "name": "gpu-screen-recorder",
+          "period": "",
+          "website": {
+            "url": "https://git.dec05eba.com/gpu-screen-recorder/commit/?id=600a871d1e9a1d0634088cd705854fd8a906ba9c",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<p>Install the NVIDIA profile only when the driver is loaded (C++)</p>"
+        },
+        {
+          "id": "6b66bebc-e8aa-4c89-80e5-0e785c635b23",
+          "hidden": false,
+          "name": "niri-autoselect-portal",
+          "period": "",
+          "website": {
+            "url": "https://codeberg.org/debugloop/niri-autoselect-portal/pulls/6",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<p>D-Bus signature fix for position and size (Go)</p>"
+        },
+        {
+          "id": "8409211c-0550-4597-a513-9c4c2c2fdf8f",
+          "hidden": false,
+          "name": "topgrade",
+          "period": "",
+          "website": {
+            "url": "https://github.com/topgrade-rs/topgrade/pull/1971",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<p>chezmoi non-standard sourceDir support (Rust)</p>"
+        },
+        {
+          "id": "4456f794-0d01-4e41-8b09-c0eb5ad1f2d8",
+          "hidden": false,
+          "name": "dgop",
+          "period": "",
+          "website": {
+            "url": "https://github.com/AvengeMedia/dgop/pull/41",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<p>Measure process CPU over the sampling interval (Go)</p>"
+        },
+        {
+          "id": "17d7545f-d4b5-49df-8170-d11d60ccb919",
+          "hidden": false,
+          "name": "tdocker",
+          "period": "",
+          "website": {
+            "url": "https://github.com/pivovarit/tdocker/pull/204",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<p>Request only the ps fields needed, dropping per-container size lookups (Go)</p>"
+        },
+        {
+          "id": "fd1801f2-5913-4dcb-9fa6-5e75d166874e",
+          "hidden": false,
+          "name": "catppuccin/discord",
+          "period": "",
+          "website": {
+            "url": "https://github.com/catppuccin/discord/pull/424",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<p>Button text contrast and hover states (CSS)</p>"
+        }
+      ]
+    }
+  ],
   "metadata": {
     "template": "onyx",
     "layout": {
@@ -390,8 +543,9 @@
           "main": [
             "summary",
             "experience",
-            "skills",
+            "df8630f6-eafb-4661-be5e-c4f9661a14b1",
             "projects",
+            "skills",
             "education",
             "certifications"
           ],

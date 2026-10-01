@@ -12,10 +12,9 @@ resume = build.load()
 assert len(build.items(resume, "experience")) >= 1
 assert build.bullets("<ul><li><p>a</p></li><li>b &amp; c</li></ul>") == ["a", "b & c"]
 
-p = build.patches(resume)
-assert len(p) >= 1 and all(len(t) == 3 for t in p), p
-assert not any(n.startswith("More") for n, _, _ in p)
-assert any(l == "C++" for _, _, l in p)
+oss = [s for s in build.custom(resume) if s["title"] == "Open Source"]
+assert len(oss) == 1 and len(oss[0]["items"]) >= 5
+assert all(i["website"]["url"].startswith("https://") for i in oss[0]["items"])
 
 L = build.links(resume)
 assert L["github"].startswith("https://github.com/")
@@ -26,6 +25,10 @@ page = build.resume_html(resume)
 assert resume["basics"]["name"] in page
 assert resume["basics"]["phone"] not in page
 assert "<p>" not in page.split("<ul>")[1].split("</ul>")[0]
+assert "<h2>Open Source</h2>" in page and page.index("<h2>Open Source</h2>") < page.index("<h2>Projects</h2>")
+assert 'href="https://github.com/kovidgoyal/kitty/pull/10094">kitty</a>' in page
+assert "Owner" in page and "Registered Apprenticeship" not in page
+assert page.count('<div class="row">') == len(build.items(resume, "experience"))
 
 r = json.loads(json.dumps(resume))
 r["sections"]["experience"]["items"][0]["hidden"] = True
@@ -41,7 +44,7 @@ with tempfile.TemporaryDirectory() as d:
         (root / "src" / f).write_text(src.read_text() if src.exists() else "")
     idx = build.SRC / "index.html"
     (root / "src" / "index.html").write_text(idx.read_text() if idx.exists() else
-        '<pre id="about">x &amp; y</pre><pre id="ls">{{ls}}</pre>{{patches}}{{man}}')
+        '<pre id="about">x &amp; y</pre><pre id="ls">{{ls}}</pre>{{man}}')
     shutil.copy(build.ROOT / "cwel.1", root / "cwel.1")
     shutil.copy(build.ROOT / "cwel.asc", root / "cwel.asc")
     out = root / "public"
@@ -71,7 +74,7 @@ with tempfile.TemporaryDirectory() as d:
     assert "NAME" in txt and "SEE ALSO" in txt
     assert build.about_text((root / "src" / "index.html").read_text()) in txt
     assert build.about_text('<pre id="about">x &amp; y</pre>') == "x & y"
-    assert "cat patches" in txt
+    assert "cat patches" not in txt
     assert "\u2014" not in txt
 
 js = (build.SRC / "shell.js").read_text()

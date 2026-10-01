@@ -11,7 +11,6 @@ const email = (links.email || '').replace('mailto:', '');
 const files = {
   __proto__: null,
   about: tpl('about'),
-  patches: tpl('patches'),
   resume: `<a href="/resume">/resume</a>  <a href="/resume.pdf">/resume.pdf</a>`,
   keys: `<a href="/cwel.asc">/cwel.asc</a>\ngpg --locate-keys ${esc(email)}`,
 };

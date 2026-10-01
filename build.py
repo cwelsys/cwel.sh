@@ -7,15 +7,13 @@ import re
 import shutil
 import subprocess
 import sys
-import textwrap
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 SRC = ROOT / "src"
 OUT = ROOT / "public"
-LS = ["about", "resume", "patches", "github", "linkedin", "email", "keys"]
+LS = ["about", "resume", "github", "linkedin", "email", "keys"]
 STRIP = re.compile(r"\x1b\[[0-9;]*m")
-PATCH = re.compile(r"^(\S+) · (.+) \(([^()]+)\)$")
 FAVICON = (
     "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'>"
     "<rect width='16' height='16' fill='%231e1e2e'/>"
@@ -46,11 +44,8 @@ def bullets(desc):
     return [text(li) for li in re.findall(r"<li>(.*?)</li>", desc or "", re.S)]
 
 
-def patches(resume):
-    oss = next((p for p in items(resume, "projects") if p["name"] == "Open Source"), None)
-    if not oss:
-        return []
-    return [m.groups() for b in bullets(oss["description"]) if (m := PATCH.match(b))]
+def custom(resume):
+    return [s for s in resume.get("customSections", []) if not s.get("hidden")]
 
 
 def links(resume):
@@ -96,14 +91,18 @@ def _ul(desc):
     return f"<p>{h(t)}</p>" if t else ""
 
 
+def _row(title, period, meta):
+    return f'<div class="row"><h3>{title}</h3><span class="meta">{h(period)}</span></div><p class="meta">{meta}</p>'
+
+
 def resume_html(resume):
     b = resume["basics"]
     L = links(resume)
     contacts = [("email", L["email"]), ("github", L.get("github")), ("linkedin", L.get("linkedin"))]
     head = (
         f'<header><h1>{h(b["name"])}</h1>'
-        f'<p class="meta">{h(b["headline"])} · {h(b["location"])}</p>'
-        '<p class="meta">' + " · ".join(f'<a href="{h(u)}">{n}</a>' for n, u in contacts if u) + "</p></header>"
+        f'<p class="meta">{h(b["headline"])} · {h(b["location"])} · '
+        + " · ".join(f'<a href="{h(u)}">{n}</a>' for n, u in contacts if u) + "</p></header>"
     )
     parts = []
     s = resume.get("summary") or {}
@@ -112,25 +111,30 @@ def resume_html(resume):
     exp = items(resume, "experience")
     if exp:
         parts.append("<section><h2>Experience</h2>" + "".join(
-            f'<article><h3>{h(e["position"])}</h3><p class="meta">{_link(e["company"], e.get("website"))} · {h(e["period"])}'
-            + (f' · {h(e["location"])}' if e.get("location") else "")
-            + f'</p>{_ul(e.get("description"))}</article>' for e in exp) + "</section>")
+            "<article>" + _row(h(e["position"]), e["period"], _link(e["company"], e.get("website"))
+                                + (f' · {h(e["location"])}' if e.get("location") else ""))
+            + f'{_ul(e.get("description"))}</article>' for e in exp) + "</section>")
+    for sec in custom(resume):
+        its = [i for i in sec.get("items", []) if not i.get("hidden")]
+        if its:
+            parts.append(f'<section><h2>{h(sec["title"])}</h2><dl>' + "".join(
+                f'<dt>{_link(i["name"], i.get("website"))}</dt><dd>{h(text(i.get("description")))}</dd>' for i in its) + "</dl></section>")
     pr = items(resume, "projects")
     if pr:
         parts.append("<section><h2>Projects</h2>" + "".join(
-            f'<article><h3>{_link(p["name"], p.get("website"))}</h3>{_ul(p.get("description"))}</article>' for p in pr) + "</section>")
+            f'<p class="item"><b>{_link(p["name"], p.get("website"))}</b> {h(text(p.get("description")))}</p>' for p in pr) + "</section>")
     sk = items(resume, "skills")
     if sk:
         parts.append("<section><h2>Skills</h2><dl>" + "".join(
             f'<dt>{h(k["name"])}</dt><dd>{h(", ".join(k.get("keywords") or []))}</dd>' for k in sk) + "</dl></section>")
     ce = items(resume, "certifications")
     if ce:
-        parts.append("<section><h2>Certifications</h2><ul>" + "".join(
-            f'<li>{_link(c["issuer"] + " " + c["title"], c.get("website"))} · {h(c["date"])}</li>' for c in ce) + "</ul></section>")
+        parts.append("<section><h2>Certifications</h2><p>" + " · ".join(
+            f'{_link(c["issuer"] + " " + c["title"], c.get("website"))} ({h(c["date"])})' for c in ce) + "</p></section>")
     ed = items(resume, "education")
     if ed:
         parts.append("<section><h2>Education</h2>" + "".join(
-            f'<article><h3>{h(e["area"])}</h3><p class="meta">{_link(e["school"], e.get("website"))} · {h(e["period"])}</p></article>' for e in ed) + "</section>")
+            f'<p class="item"><b>{h(e["area"])}</b> {_link(e["school"], e.get("website"))} · {h(e["period"])}</p>' for e in ed) + "</section>")
     return PAGE.format(title=h(b["name"]) + " resume", favicon=FAVICON, body=head + "".join(parts))
 
 
@@ -181,22 +185,6 @@ def man_txt(man):
     return "\n".join(out)
 
 
-def patches_html(resume):
-    rows = patches(resume)
-    gh = links(resume)["github"]
-    body = "\n".join(f'<span class="g">{h(n)}</span>  <span class="dim">{h(l)}</span>\n    {h(d)}' for n, d, l in rows)
-    return body + f'\n\nmore at <a href="{h(gh)}">{h(gh.removeprefix("https://"))}</a>'
-
-
-def patches_txt(resume):
-    rows = patches(resume)
-    gh = links(resume)["github"]
-    body = "\n".join(
-        f'{ansi("green", n)}  {ansi("dim", l)}\n' + textwrap.fill(d, 80, initial_indent="    ", subsequent_indent="    ")
-        for n, d, l in rows)
-    return body + f"\n\nmore at {gh}"
-
-
 def ls_html(resume):
     L = links(resume)
     return "  ".join(f'<a href="{h(L[n])}">{n}</a>' if n in L else n for n in LS)
@@ -214,7 +202,6 @@ def index_txt(resume, about, man):
     return "\n".join([
         f"{P} cat about", about, "",
         f"{P} ls", ls, "",
-        f"{P} cat patches", patches_txt(resume), "",
         f"{P} man cwel", man_txt(man), "",
         f"{P} ",
         "resume:   https://cwel.sh/resume",
@@ -255,7 +242,7 @@ def build(out=OUT, root=ROOT):
     shutil.copy(root / "cwel.1", out / "cwel.1")
     man = man_text(root)
     index = (src / "index.html").read_text()
-    page = index.replace("{{ls}}", ls_html(resume)).replace("{{patches}}", patches_html(resume)).replace("{{man}}", man_html(man))
+    page = index.replace("{{ls}}", ls_html(resume)).replace("{{man}}", man_html(man))
     (out / "index.html").write_text(page)
     (out / "index.txt").write_text(index_txt(resume, about_text(index), man))
     (out / "resume" / "index.html").write_text(resume_html(resume))
