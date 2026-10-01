@@ -44,10 +44,11 @@ output > pre.cmd { margin-bottom: 0; }
 .resume .row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 1rem; align-items: baseline; margin-top: 1rem; }
 .resume .row .meta { margin-left: auto; }
 .resume .meta { color: var(--sub); margin: 0 0 .25rem; }
-.resume ul { margin: .25rem 0 0; padding-left: 1.25rem; list-style: "\25E6  "; }
+.resume ul { margin: .25rem 0 0; padding-left: 1.25rem; list-style: "\2013  "; }
 .resume li::marker { color: var(--sub); }
 .resume dl { display: grid; grid-template-columns: max-content 1fr; gap: .25rem 1rem; margin: 0; }
 .resume dd { margin: 0; }
+.resume .line { margin: 0; }
 .resume .item { margin: 0 0 .5rem; }
 .resume .item b { font-family: ui-monospace, monospace; font-weight: normal; }
 .resume .nav { margin-top: 3rem; }

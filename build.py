@@ -107,7 +107,8 @@ def resume_html(resume):
     parts = []
     s = resume.get("summary") or {}
     if s.get("content") and not s.get("hidden"):
-        parts.append(f'<section><h2>Summary</h2><p>{h(text(s["content"]))}</p></section>')
+        paras = [t for t in (text(x) for x in re.split(r"</p>|<br\s*/?>", s["content"])) if t]
+        parts.append('<section><h2>Summary</h2>' + "".join(f'<p class="line">{h(t)}</p>' for t in paras) + "</section>")
     exp = items(resume, "experience")
     if exp:
         parts.append("<section><h2>Experience</h2>" + "".join(
