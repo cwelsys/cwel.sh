@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
+import hashlib
 import html
 import json
+import os
 import re
+import shutil
+import subprocess
+import sys
+import textwrap
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -126,3 +132,135 @@ def resume_html(resume):
         parts.append("<section><h2>Education</h2>" + "".join(
             f'<article><h3>{h(e["area"])}</h3><p class="meta">{_link(e["school"], e.get("website"))} · {h(e["period"])}</p></article>' for e in ed) + "</section>")
     return PAGE.format(title=h(b["name"]) + " resume", favicon=FAVICON, body=head + "".join(parts))
+
+
+ANSI = {
+    "blue": "38;2;137;180;250", "peach": "38;2;250;179;135", "green": "38;2;166;227;161",
+    "yellow": "38;2;249;226;175", "mauve": "38;2;203;166;247", "dim": "38;2;108;112;134",
+}
+
+
+def ansi(color, s):
+    return f"\x1b[{ANSI[color]}m{s}\x1b[0m"
+
+
+def man_text(root=ROOT):
+    env = {**os.environ, "GROFF_NO_SGR": "1"}
+    g = subprocess.run(["groff", "-mandoc", "-Tascii", "-rLL=78n", "-rHY=0", "-dAD=l", str(root / "cwel.1")],
+                       capture_output=True, text=True, check=True, env=env)
+    c = subprocess.run(["col", "-bx"], input=g.stdout, capture_output=True, text=True, check=True)
+    return c.stdout.strip("\n")
+
+
+def _is_section(line):
+    return re.fullmatch(r"[A-Z][A-Z ]+", line) is not None
+
+
+def man_html(man):
+    out = []
+    for line in man.splitlines():
+        e = h(line)
+        if _is_section(line):
+            e = f'<span class="y">{e}</span>'
+        elif "CWEL(1)" in line:
+            e = f'<span class="k">{e}</span>'
+        e = re.sub(r"(https?://[^\s,]+)", r'<a href="\1">\1</a>', e)
+        e = re.sub(r"(?<![\w/])([\w.+-]+@[\w-]+\.[\w.]+)", r'<a href="mailto:\1">\1</a>', e)
+        out.append(e)
+    return "\n".join(out)
+
+
+def man_txt(man):
+    out = []
+    for line in man.splitlines():
+        if _is_section(line):
+            line = ansi("yellow", line)
+        elif "CWEL(1)" in line:
+            line = ansi("mauve", line)
+        out.append(line)
+    return "\n".join(out)
+
+
+def patches_html(resume):
+    rows = patches(resume)
+    gh = links(resume)["github"]
+    body = "\n".join(f'<span class="g">{h(n)}</span>  <span class="dim">{h(l)}</span>\n    {h(d)}' for n, d, l in rows)
+    return body + f'\n\nmore at <a href="{h(gh)}">{h(gh.removeprefix("https://"))}</a>'
+
+
+def patches_txt(resume):
+    rows = patches(resume)
+    gh = links(resume)["github"]
+    body = "\n".join(
+        f'{ansi("green", n)}  {ansi("dim", l)}\n' + textwrap.fill(d, 80, initial_indent="    ", subsequent_indent="    ")
+        for n, d, l in rows)
+    return body + f"\n\nmore at {gh}"
+
+
+def ls_html(resume):
+    L = links(resume)
+    return "  ".join(f'<a href="{h(L[n])}">{n}</a>' if n in L else n for n in LS)
+
+
+def about_text(index_html):
+    m = re.search(r'<pre id="about">(.*?)</pre>', index_html, re.S)
+    return text(m.group(1)) if m else ""
+
+
+def index_txt(resume, about, man):
+    L = links(resume)
+    P = f'{ansi("blue", "~")} {ansi("peach", "❯")}'
+    ls = "  ".join(ansi("blue", n) if n in L else n for n in LS)
+    return "\n".join([
+        f"{P} cat about", about, "",
+        f"{P} ls", ls, "",
+        f"{P} cat patches", patches_txt(resume), "",
+        f"{P} man cwel", man_txt(man), "",
+        f"{P} ",
+        "resume:   https://cwel.sh/resume",
+        "pdf:      https://cwel.sh/resume.pdf",
+        "man:      curl -s cwel.sh/cwel.1 | man -l -",
+        f"github:   {L['github']}",
+        f"linkedin: {L['linkedin']}",
+        "",
+    ])
+
+
+def zb32(data):
+    alphabet = "ybndrfg8ejkmcpqxot1uwisza345h769"
+    bits = "".join(f"{b:08b}" for b in data)
+    return "".join(alphabet[int(bits[i:i + 5].ljust(5, "0"), 2)] for i in range(0, len(bits), 5))
+
+
+def write_keys(out, email, root=ROOT):
+    asc = root / "cwel.asc"
+    shutil.copy(asc, out / "cwel.asc")
+    local = email.split("@")[0].lower()
+    wkd = out / ".well-known" / "openpgpkey"
+    (wkd / "hu").mkdir(parents=True)
+    (wkd / "policy").write_text("")
+    binary = subprocess.run(["gpg", "--dearmor"], input=asc.read_bytes(), capture_output=True, check=True).stdout
+    (wkd / "hu" / zb32(hashlib.sha1(local.encode()).digest())).write_bytes(binary)
+
+
+def build(out=OUT, root=ROOT):
+    src = root / "src"
+    resume = load(root / "resume.json") if (root / "resume.json").exists() else load()
+    if out.exists():
+        shutil.rmtree(out)
+    (out / "resume").mkdir(parents=True)
+    for f in ("style.css", "shell.js", "404.html", "_headers"):
+        shutil.copy(src / f, out / f)
+    shutil.copy(root / "cwel.1", out / "cwel.1")
+    man = man_text(root)
+    index = (src / "index.html").read_text()
+    page = index.replace("{{ls}}", ls_html(resume)).replace("{{patches}}", patches_html(resume)).replace("{{man}}", man_html(man))
+    (out / "index.html").write_text(page)
+    (out / "index.txt").write_text(index_txt(resume, about_text(index), man))
+    (out / "resume" / "index.html").write_text(resume_html(resume))
+    write_keys(out, resume["basics"]["email"], root)
+
+
+if __name__ == "__main__":
+    build()
+    print(f"built {OUT}", file=sys.stderr)

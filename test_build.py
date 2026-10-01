@@ -1,4 +1,7 @@
 import json
+import re
+import shutil
+import tempfile
 from pathlib import Path
 
 import build
@@ -28,5 +31,39 @@ r["sections"]["experience"]["items"][0]["hidden"] = True
 assert r["sections"]["experience"]["items"][0]["position"] not in build.resume_html(r)
 r["sections"]["certifications"]["hidden"] = True
 assert "Certifications" not in build.resume_html(r)
+
+with tempfile.TemporaryDirectory() as d:
+    root = Path(d)
+    (root / "src").mkdir()
+    for f in ("style.css", "shell.js", "404.html", "_headers"):
+        src = build.SRC / f
+        (root / "src" / f).write_text(src.read_text() if src.exists() else "")
+    idx = build.SRC / "index.html"
+    (root / "src" / "index.html").write_text(idx.read_text() if idx.exists() else
+        '<pre id="about">x &amp; y</pre><pre id="ls">{{ls}}</pre>{{patches}}{{man}}')
+    shutil.copy(build.ROOT / "cwel.1", root / "cwel.1")
+    shutil.copy(build.ROOT / "cwel.asc", root / "cwel.asc")
+    out = root / "public"
+    build.build(out, root=root)
+    files = {p.relative_to(out).as_posix(): p for p in out.rglob("*") if p.is_file()}
+    for f in ("index.html", "index.txt", "resume/index.html", "cwel.1", "_headers", "404.html", "style.css", "shell.js", "cwel.asc", ".well-known/openpgpkey/policy"):
+        assert f in files, f
+    assert len([f for f in files if f.startswith(".well-known/openpgpkey/hu/")]) == 1
+    phone = resume["basics"]["phone"]
+    if phone:
+        for p in files.values():
+            assert phone not in p.read_bytes().decode("utf-8", "ignore"), p
+    for page in ("index.html", "resume/index.html"):
+        for href in set(re.findall(r'href="([^"#]+)"', files[page].read_text())):
+            if href.startswith(("http", "mailto:", "data:")):
+                continue
+            t = href.lstrip("/") or "index.html"
+            assert t in files or t + "/index.html" in files or t == "resume.pdf", (page, href)
+    txt = files["index.txt"].read_text()
+    for line in txt.splitlines():
+        assert len(build.STRIP.sub("", line)) <= 80, line
+    assert "NAME" in txt and "SEE ALSO" in txt and "x & y" in txt
+    assert "cat patches" in txt
+    assert "—" not in txt
 
 print("ok")
