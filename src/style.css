@@ -64,7 +64,7 @@ output > pre.cmd { margin-bottom: 0; }
   .resume .row { margin-top: .5rem; }
   .resume ul { margin: .1rem 0 0; }
   .resume .item { margin-bottom: .3rem; }
-  .resume .meta { color: #333; }
+  .resume .meta, .resume li::marker { color: #333; }
   .resume article, .resume dt, .resume dd { break-inside: avoid; }
   a { color: #0645ad; }
   .nav { display: none; }
