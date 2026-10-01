@@ -1,0 +1,452 @@
+{
+  "picture": {
+    "hidden": true,
+    "url": "https://avatars.githubusercontent.com/u/16944548?v=4",
+    "size": 64,
+    "rotation": 0,
+    "aspectRatio": 1,
+    "borderRadius": 8,
+    "borderColor": "rgba(0, 0, 0, 0.5)",
+    "borderWidth": 0,
+    "shadowColor": "rgba(0, 0, 0, 0.5)",
+    "shadowWidth": 0
+  },
+  "basics": {
+    "name": "Connor Welsh",
+    "headline": "Software Developer",
+    "email": "cwel@cwel.sh",
+    "phone": "703-946-7057",
+    "location": "Arlington, VA",
+    "website": {
+      "url": "",
+      "label": ""
+    },
+    "customFields": [
+      {
+        "id": "019e2761-9556-708e-bf0b-c0832da70510",
+        "icon": "github-logo",
+        "text": "cwelsys",
+        "link": "https://github.com/cwelsys"
+      },
+      {
+        "id": "019e2761-f0ea-771a-90c0-a4240c17b424",
+        "icon": "linkedin-logo",
+        "text": "connor-welsh",
+        "link": "https://www.linkedin.com/in/connor-welsh/"
+      }
+    ]
+  },
+  "summary": {
+    "title": "",
+    "columns": 1,
+    "hidden": false,
+    "content": "<p>Software developer. Writing professional software since 2018, Salesforce since 2024. Open source time goes to the Linux desktop. Seeking a software development role in the DC area or remote.</p>"
+  },
+  "sections": {
+    "profiles": {
+      "title": "",
+      "columns": 1,
+      "hidden": false,
+      "items": []
+    },
+    "experience": {
+      "title": "",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "d5041d07-30e3-4590-a33d-0b9f3a182be1",
+          "hidden": false,
+          "company": "Blind Institute of Technology",
+          "position": "Software Developer (contract)",
+          "location": "Remote",
+          "period": "Jul 2026 - Present",
+          "website": {
+            "url": "https://blindit.org",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<ul><li><p>Designed and developed a WordPress theme to replace a page-builder site.</p></li><li><p>Developed Gutenberg blocks, block patterns, and full-site-editing templates in PHP and JavaScript.</p></li><li><p>Built the site to WCAG 2.2 AA and resolved findings from NVDA and JAWS screen reader audits.</p></li><li><p>Automated pre-deploy checks for coding standards, accessibility, and visual regression with PHPCS, axe, and Playwright.</p></li><li><p>Built and ran the release process for staging and production, with scripted deployments and database backups.</p></li></ul>",
+          "roles": []
+        },
+        {
+          "id": "019e2763-4461-729a-8645-248efa7ae593",
+          "hidden": false,
+          "company": "Blind Institute of Technology",
+          "position": "Salesforce Administrator (Registered Apprenticeship)",
+          "location": "Remote",
+          "period": "Aug 2025 - Present",
+          "website": {
+            "url": "https://blindit.org",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<ul><li><p>Automated continuing-education credit approval for an LMS integration using record-triggered Flows and asynchronous Apex.</p></li><li><p>Wrote bulk-safe Apex triggers with test coverage that maintain certification rollups across mass updates and account merges.</p></li><li><p>Built scheduled Flows for certification renewal reminders, renewal record creation, and expiry notices.</p></li><li><p>Designed custom objects for job requisitions, offers, and placements in an in-house applicant tracking system, with user guides and acceptance testing.</p></li><li><p>Trained administrators on Salesforce release changes with screen-reader-accessible materials.</p></li><li><p>Coordinate the weekly delivery meeting as rotating Delivery Coordinator, collecting project updates and tracking action items.</p></li></ul>",
+          "roles": []
+        },
+        {
+          "id": "019e2763-c365-72d4-b5fc-00e626a73561",
+          "hidden": false,
+          "company": "cwel Systems",
+          "position": "Solutions Architect",
+          "location": "McLean, VA",
+          "period": "Mar 2021 - Present",
+          "website": {
+            "url": "https://cwel.sh",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<ul><li><p>Developed trademark monitoring software that scrapes USPTO TSDR records with Selenium and detects mark usage with OpenCV feature matching and Tesseract OCR.</p></li><li><p>Administer a Microsoft 365 tenant, including Entra ID identity, Exchange Online mail security, licensing, and migration off a managed service provider.</p></li><li><p>Administer Linux hosts and containerized services, including networking, TLS, DNS, CI/CD pipelines, backups, and monitoring.</p></li></ul>",
+          "roles": []
+        },
+        {
+          "id": "019e2764-f09d-737e-acbd-c8a3db9059b8",
+          "hidden": false,
+          "company": "Matrix Group International",
+          "position": "Project Manager",
+          "location": "Arlington, VA",
+          "period": "May 2022 - Nov 2022",
+          "website": {
+            "url": "https://matrixgroup.net/",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<ul><li><p>Turned association clients’ requirements into scope and tickets.</p></li><li><p>Managed concurrent website and AMS projects against their schedules and budgets.</p></li><li><p>Coordinated developers, designers, and account managers across projects.</p></li></ul>",
+          "roles": []
+        },
+        {
+          "id": "019e2765-61fb-741e-842a-7edc1f78f3e9",
+          "hidden": false,
+          "company": "Matrix Group International",
+          "position": "Conference Manager",
+          "location": "Arlington, VA",
+          "period": "Aug 2021 - Jan 2022",
+          "website": {
+            "url": "https://matrixgroup.net/",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<ul><li><p>Point of contact for client staff, speakers, AV technicians, and the platform’s developers before and during each event.</p></li><li><p>Configured sessions, schedules, and access in the event platform; walked speakers through it ahead of time.</p></li><li><p>Troubleshot audio, access, and broadcast problems for attendees and speakers as they came up.</p></li></ul>",
+          "roles": []
+        },
+        {
+          "id": "019e2765-fa7f-745f-a144-223ce46e0f36",
+          "hidden": false,
+          "company": "ManTech International Corporation",
+          "position": "Technical Sourcing Recruiter",
+          "location": "Herndon, VA",
+          "period": "Dec 2019 - Mar 2021",
+          "website": {
+            "url": "https://mantech.com/",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<ul><li><p>Sourced and screened engineers and cleared technical staff for federal contracts.</p></li><li><p>Led the department rollout of LinkedIn Talent Insights; trained recruiters and presented use cases to leadership.</p></li><li><p>Reported pipeline status, blockers, and staffing needs to program executives.</p></li></ul>",
+          "roles": []
+        },
+        {
+          "id": "019e2766-ef7d-77ee-93d1-4d9f7b739016",
+          "hidden": false,
+          "company": "DataForce LLC",
+          "position": "Technical Lead / Project Manager",
+          "location": "Leesburg, VA",
+          "period": "Jan 2018 - Jan 2020",
+          "website": {
+            "url": "",
+            "label": "",
+            "inlineLink": false
+          },
+          "description": "<ul><li><p>Built and deployed a certificate-of-insurance compliance application on Drupal and AWS.</p></li><li><p>Designed the data model for policies, coverage requirements, and expirations; automated expiration alerts.</p></li><li><p>Implemented PDF ingestion that parsed certificates into structured records.</p></li><li><p>Implemented role-based access controls over customer data.</p></li><li><p>Managed scope, vendors, acceptance testing, documentation, and user training.</p></li></ul>",
+          "roles": []
+        },
+        {
+          "id": "019e2767-5c09-71d8-a2b5-3babe956bb2f",
+          "hidden": false,
+          "company": "BankingBridge",
+          "position": "Customer Success Manager / Web Developer",
+          "location": "Charleston, SC",
+          "period": "Jan 2018 - Aug 2018",
+          "website": {
+            "url": "https://bankingbridge.com/",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": "<ul><li><p>Client technical contact; ran onboarding webinars; built example workflows; wrote user and maintenance docs.</p></li></ul>",
+          "roles": []
+        }
+      ]
+    },
+    "education": {
+      "title": "",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "019e2767-d360-77a1-8108-2d939707f930",
+          "hidden": false,
+          "school": "College of Charleston",
+          "degree": "",
+          "area": "Bachelor of Science, Computer Information Systems",
+          "grade": "",
+          "location": "Charleston, SC",
+          "period": "Aug 2013 - Dec 2017",
+          "website": {
+            "url": "https://charleston.edu/compsci/index.php",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": ""
+        }
+      ]
+    },
+    "projects": {
+      "title": "Open Source and Projects",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "01a0f497-29ea-7ddf-b289-a590769ebf87",
+          "hidden": false,
+          "name": "Screen Reader Proficiency Assessment",
+          "period": "",
+          "website": {
+            "url": "",
+            "label": "",
+            "inlineLink": false
+          },
+          "description": "<p>Node, Express, Vercel. Express backend with HMAC-signed stateless test tokens, keyboard interaction tracking with mouse-use flags, emailed CSV results, a Vitest suite, and Vercel deployment.</p>"
+        },
+        {
+          "id": "01a0f497-29ea-718d-81af-1c09a2f77389",
+          "hidden": false,
+          "name": "Open Source",
+          "period": "",
+          "website": {
+            "url": "https://github.com/cwelsys",
+            "label": "github.com/cwelsys",
+            "inlineLink": true
+          },
+          "description": "<ul><li><p>kitty · Wayland crash hiding the titlebar on layer-shell windows (C)</p></li><li><p>gpu-screen-recorder · install the NVIDIA profile only when the driver is loaded (C++)</p></li><li><p>rmpc · MPRIS Seek, SetPosition, and Seeked for the daemon (Rust)</p></li><li><p>niri-autoselect-portal · D-Bus signature fix for position and size (Go)</p></li><li><p>topgrade · chezmoi non-standard sourceDir support (Rust)</p></li><li><p>More at github.com/cwelsys</p></li></ul>"
+        }
+      ]
+    },
+    "skills": {
+      "title": "",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "019e3000-0001-7000-a000-000000000002",
+          "hidden": false,
+          "icon": "",
+          "iconColor": "",
+          "name": "Languages",
+          "proficiency": "",
+          "level": 0,
+          "keywords": [
+            "PHP, JavaScript, Python, SQL, Bash; contributions in C, Rust, Go, QML"
+          ]
+        },
+        {
+          "id": "019e3000-0001-7000-a000-000000000001",
+          "hidden": false,
+          "icon": "",
+          "iconColor": "",
+          "name": "Web",
+          "proficiency": "",
+          "level": 0,
+          "keywords": [
+            "WordPress, React, Node.js, Express, Drupal"
+          ]
+        },
+        {
+          "id": "01a0f466-d09f-7e2a-bb4e-9392a575c724",
+          "hidden": false,
+          "icon": "",
+          "iconColor": "",
+          "name": "Accessibility",
+          "proficiency": "",
+          "level": 0,
+          "keywords": [
+            "WCAG 2.2 AA, ARIA, NVDA, JAWS, axe"
+          ]
+        },
+        {
+          "id": "01a0f461-9ee0-7727-a2b5-a6c7e247de65",
+          "hidden": false,
+          "icon": "",
+          "iconColor": "",
+          "name": "Salesforce",
+          "proficiency": "",
+          "level": 0,
+          "keywords": [
+            "Flow, Apex, SOQL, Lightning Web Components, Salesforce CLI"
+          ]
+        },
+        {
+          "id": "019e3000-0001-7000-a000-000000000005",
+          "hidden": false,
+          "icon": "",
+          "iconColor": "",
+          "name": "Systems",
+          "proficiency": "",
+          "level": 0,
+          "keywords": [
+            "Linux, Docker, Traefik, Cloudflare, AWS, Microsoft 365, Entra ID"
+          ]
+        },
+        {
+          "id": "01a0f470-d206-7302-b0b4-27fc17e33383",
+          "hidden": false,
+          "icon": "",
+          "iconColor": "",
+          "name": "Tools",
+          "proficiency": "",
+          "level": 0,
+          "keywords": [
+            "Git, Woodpecker CI, Playwright, Vitest, PHPCS"
+          ]
+        }
+      ]
+    },
+    "languages": {
+      "title": "",
+      "columns": 1,
+      "hidden": false,
+      "items": []
+    },
+    "interests": {
+      "title": "",
+      "columns": 1,
+      "hidden": false,
+      "items": []
+    },
+    "awards": {
+      "title": "",
+      "columns": 1,
+      "hidden": false,
+      "items": []
+    },
+    "certifications": {
+      "title": "",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "019e2768-c698-77ec-9a38-cec37767b0a1",
+          "hidden": false,
+          "title": "Administrator",
+          "issuer": "Salesforce",
+          "date": "Nov 2024",
+          "website": {
+            "url": "https://salesforce.com/trailblazer/dsr8a13f6bajrzleex",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": ""
+        },
+        {
+          "id": "019e2769-1a73-779d-8048-2b61d69d3ed7",
+          "hidden": false,
+          "title": "Associate",
+          "issuer": "Salesforce",
+          "date": "Sep 2024",
+          "website": {
+            "url": "https://salesforce.com/trailblazer/dsr8a13f6bajrzleex",
+            "label": "",
+            "inlineLink": true
+          },
+          "description": ""
+        }
+      ]
+    },
+    "publications": {
+      "title": "",
+      "columns": 1,
+      "hidden": false,
+      "items": []
+    },
+    "volunteer": {
+      "title": "",
+      "columns": 1,
+      "hidden": false,
+      "items": []
+    },
+    "references": {
+      "title": "",
+      "columns": 1,
+      "hidden": false,
+      "items": []
+    }
+  },
+  "customSections": [],
+  "metadata": {
+    "template": "onyx",
+    "layout": {
+      "sidebarWidth": 35,
+      "pages": [
+        {
+          "fullWidth": false,
+          "main": [
+            "summary",
+            "experience",
+            "skills",
+            "projects",
+            "education",
+            "certifications"
+          ],
+          "sidebar": [
+            "profiles",
+            "awards",
+            "languages",
+            "interests",
+            "publications",
+            "volunteer",
+            "references"
+          ]
+        }
+      ]
+    },
+    "page": {
+      "gapX": 4,
+      "gapY": 6,
+      "marginX": 14,
+      "marginY": 12,
+      "format": "a4",
+      "locale": "en-US",
+      "hideIcons": false
+    },
+    "design": {
+      "level": {
+        "icon": "star",
+        "type": "circle"
+      },
+      "colors": {
+        "primary": "rgb(30, 102, 245)",
+        "text": "rgb(76, 79, 105)",
+        "background": "rgb(239, 241, 245)"
+      }
+    },
+    "typography": {
+      "body": {
+        "fontFamily": "IBM Plex Sans",
+        "fontWeights": [
+          "400",
+          "600"
+        ],
+        "fontSize": 10,
+        "lineHeight": 1.3
+      },
+      "heading": {
+        "fontFamily": "IBM Plex Sans",
+        "fontWeights": [
+          "400",
+          "600"
+        ],
+        "fontSize": 14,
+        "lineHeight": 1.5
+      }
+    },
+    "notes": ""
+  }
+}
