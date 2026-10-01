@@ -240,13 +240,14 @@ def build(out=OUT, root=ROOT):
     if out.exists():
         shutil.rmtree(out)
     (out / "resume").mkdir(parents=True)
-    for f in ("style.css", "shell.js", "404.html", "_headers"):
+    for f in ("style.css", "shell.js", "logos.js", "nf.woff2", "braille.woff2", "404.html", "_headers"):
         shutil.copy(src / f, out / f)
     shutil.copy(root / "cwel.1", out / "cwel.1")
     man = man_text(root)
     login = time.ctime()
     index = (src / "index.html").read_text()
-    page = index.replace("{{login}}", login).replace("{{ls}}", ls_html(resume)).replace("{{man}}", man_html(man))
+    built = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    page = index.replace("{{login}}", login).replace("{{built}}", built).replace("{{ls}}", ls_html(resume)).replace("{{man}}", man_html(man))
     (out / "index.html").write_text(page)
     (out / "index.txt").write_text(index_txt(resume, about_text(index), man, login))
     (out / "resume" / "index.html").write_text(resume_html(resume))

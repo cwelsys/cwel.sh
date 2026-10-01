@@ -5,8 +5,9 @@ const tpl = id => document.getElementById(id).innerHTML.trim();
 const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const err = s => `<span class="err">${s}</span>`;
 const PROMPT = '<span class="d">~</span>\n<span class="p">❯</span>';
-const BORN = Date.UTC(1994, 9, 7);
-const colo = (/from (\S+)/.exec(document.getElementById('login').textContent) || [])[1] || 'localhost';
+const login = document.getElementById('login');
+const BOOT = Date.parse(login.dataset.built) || Date.now();
+const colo = (/from (\S+)/.exec(login.textContent) || [])[1] || 'localhost';
 const links = { __proto__: null };
 for (const a of document.querySelectorAll('#ls a')) links[a.textContent] = a.getAttribute('href');
 const email = (links.email || '').replace('mailto:', '');
@@ -16,10 +17,12 @@ const files = {
   resume: `<a href="/resume">/resume</a>  <a href="/resume.pdf">/resume.pdf</a>`,
   pgp: `<a href="/cwel.asc">/cwel.asc</a>\ngpg --locate-keys ${esc(email)}`,
 };
-const logo = `  .--------.
-  |  >_    |
-  |        |
-  '--------'`;
+const logo = `.----------.
+| <span class="d">~</span>        |
+| <span class="p">❯</span> <span class="c">▮</span>      |
+'----------'`;
+const ICONS = { host: '\u{f01c5}', os: '\u{f07fe}', kernel: '\uf013', uptime: '\u{f0150}', shell: '\uf489', term: '\ue795', network: '\u{f0a5f}', colors: '\u{f03d8}' };
+const HUES = ['d', 'p', 'y', 'g', 'k'];
 function browser() {
   const ua = navigator.userAgent;
   for (const [n, re] of [['Edge', /Edg\/(\d+)/], ['Firefox', /Firefox\/(\d+)/], ['Chrome', /Chrome\/(\d+)/], ['Safari', /Version\/(\d+).*Safari/]]) {
@@ -29,27 +32,32 @@ function browser() {
   return ['Browser', ''];
 }
 function uptime() {
-  let m = Math.floor((Date.now() - BORN) / 60000);
+  let m = Math.floor((Date.now() - BOOT) / 60000);
   const d = Math.floor(m / 1440); m -= d * 1440;
   const h = Math.floor(m / 60); m -= h * 60;
-  return `${d} days, ${h} hours, ${m} mins`;
+  return [[d, 'day'], [h, 'hour'], [m, 'min']].filter(([n]) => n).map(([n, u]) => `${n} ${u}${n === 1 ? '' : 's'}`).join(', ') || '0 mins';
 }
-function fetch_() {
+let server;
+async function sys() {
+  server ??= await fetch(location.href, { method: 'HEAD' }).then(r => r.headers.get('server') || 'unknown', () => 'unknown');
+  const proto = (performance.getEntriesByType('navigation')[0]?.nextHopProtocol || 'http').replace(/^h(\d)$/, 'HTTP/$1').replace(/^http\//, 'HTTP/');
+  return { server, host: location.hostname, proto };
+}
+async function fetch_() {
   const [n, v] = browser();
+  const { server, host, proto } = await sys();
   const rows = [
-    ['<span class="p">guest</span>@<span class="p">cwel.sh</span>'],
-    ['<span class="dim">-------------</span>'],
-    ['OS', 'cwel.sh'], ['Host', `Cloudflare ${colo}`], ['Kernel', 'static html'],
-    ['Uptime', uptime()], ['Shell', 'sh.js'], ['Theme', 'Catppuccin Mocha'],
-    ['Font', 'yours'], ['Term', `${n} ${v}`.trim()], ['Locale', navigator.language],
-    ['<span class="err">●</span><span class="p">●</span><span class="y">●</span><span class="g">●</span><span class="d">●</span><span class="k">●</span>'],
-  ];
-  const lines = logo.split('\n');
-  const w = Math.max(...lines.map(l => l.length)) + 3;
-  return rows.map((r, i) =>
-    `<span aria-hidden="true">${esc((lines[i] ?? '').padEnd(w))}</span>` +
-    (r.length === 2 ? `<span class="y">${r[0].padEnd(8)}</span> ${esc(r[1])}` : r[0])
-  ).join('\n');
+    ['host', host], ['os', server], ['kernel', proto], ['uptime', uptime()],
+    ['shell', 'shell.js'], ['term', `${n} ${v}`.trim()], ['network', colo],
+  ].map(([k, val], i) => [k, k, esc(val), HUES[i % HUES.length]]);
+  rows.push(['colors', [...'colors'].map((ch, i) => `<span class="${HUES[i % HUES.length]}">${ch}</span>`).join(''),
+    '<span class="err">●</span> <span class="p">●</span> <span class="y">●</span> <span class="g">●</span> <span class="d">●</span> <span class="k">●</span>', 'd']);
+  const body = [
+    `<span class="p">guest</span>@<span class="p">${esc(location.hostname)}</span>`,
+    '<span class="dim">-------------</span>',
+    ...rows.map(([k, label, val, hue]) => `<span class="${hue}" aria-hidden="true">${ICONS[k]}</span> ${label}${' '.repeat(9 - k.length)}<span class="${hue}">${val}</span>`),
+  ].join('\n');
+  return `<span class="logo" aria-hidden="true">${self.logos?.[n] ?? logo}</span><span class="fetch">${body}</span>`;
 }
 const cmds = {
   __proto__: null,
@@ -72,7 +80,7 @@ const cmds = {
   whoami: () => 'guest',
   pwd: () => '/home/cwel',
   echo: a => esc(a.join(' ')),
-  uname: () => `Linux ${esc(colo)}.cloudflare.net`,
+  uname: async () => { const s = await sys(); return esc(`${s.server} ${s.host} ${s.proto}`); },
   clear: () => { out.innerHTML = ''; return null; },
   sudo: () => err('guest is not in the sudoers file.  This incident will be reported.'),
   rm: () => err('rm: permission denied'),
@@ -98,9 +106,10 @@ form.addEventListener('submit', e => {
   print(`${PROMPT} ${esc(raw)}`, 'cmd');
   hist.push(raw);
   hi = hist.length;
-  const r = cmds[c] ? cmds[c](a) : err(`zsh: command not found: ${esc(c)}`);
-  if (r !== null) print(r);
-  input.scrollIntoView({ block: 'end' });
+  Promise.resolve(cmds[c] ? cmds[c](a) : err(`zsh: command not found: ${esc(c)}`)).then(r => {
+    if (r !== null) print(r);
+    input.scrollIntoView({ block: 'end' });
+  });
 });
 input.addEventListener('keydown', e => {
   if (e.key === 'ArrowUp' && hi > 0) { input.value = hist[--hi]; e.preventDefault(); }

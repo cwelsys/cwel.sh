@@ -9,5 +9,7 @@
   Content-Type: application/octet-stream
 /shell.js
   Cache-Control: public, max-age=0, must-revalidate
+/logos.js
+  Cache-Control: public, max-age=0, must-revalidate
 /style.css
   Cache-Control: public, max-age=0, must-revalidate

@@ -39,9 +39,9 @@ assert "Certifications" not in build.resume_html(r)
 with tempfile.TemporaryDirectory() as d:
     root = Path(d)
     (root / "src").mkdir()
-    for f in ("style.css", "shell.js", "404.html", "_headers"):
+    for f in ("style.css", "shell.js", "logos.js", "nf.woff2", "braille.woff2", "404.html", "_headers"):
         src = build.SRC / f
-        (root / "src" / f).write_text(src.read_text() if src.exists() else "")
+        (root / "src" / f).write_bytes(src.read_bytes() if src.exists() else b"")
     idx = build.SRC / "index.html"
     (root / "src" / "index.html").write_text(idx.read_text() if idx.exists() else
         '<pre id="login">{{login}} from localhost</pre><pre id="about">x &amp; y</pre><pre id="ls">{{ls}}</pre>{{man}}')
@@ -50,7 +50,7 @@ with tempfile.TemporaryDirectory() as d:
     out = root / "public"
     build.build(out, root=root)
     files = {p.relative_to(out).as_posix(): p for p in out.rglob("*") if p.is_file()}
-    for f in ("index.html", "index.txt", "resume/index.html", "cwel.1", "_headers", "404.html", "style.css", "shell.js", "cwel.asc", ".well-known/openpgpkey/policy"):
+    for f in ("index.html", "index.txt", "resume/index.html", "cwel.1", "_headers", "404.html", "style.css", "shell.js", "logos.js", "nf.woff2", "braille.woff2", "cwel.asc", ".well-known/openpgpkey/policy"):
         assert f in files, f
     assert len([f for f in files if f.startswith(".well-known/openpgpkey/hu/")]) == 1
     domain = resume["basics"]["email"].split("@")[1]
@@ -79,6 +79,7 @@ with tempfile.TemporaryDirectory() as d:
     html = files["index.html"].read_text()
     assert "from localhost" in html and 'href="/cwel.asc">pgp</a>' in html and ">dotfiles</a>" in html
     assert "{{" not in html and "{{" not in txt
+    assert re.search(r'data-built="\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ"', html)
     assert "\u2014" not in txt
 
 js = (build.SRC / "shell.js").read_text()
@@ -108,5 +109,5 @@ for f in ("build.py", "test_build.py", "cwel.1", "Makefile", "src/index.html", "
 print("ok")
 
 headers = (build.SRC / "_headers").read_text()
-for asset in ("/shell.js", "/style.css"):
+for asset in ("/shell.js", "/logos.js", "/style.css"):
     assert re.search(rf"^{re.escape(asset)}\n  Cache-Control: public, max-age=0, must-revalidate", headers, re.M), asset

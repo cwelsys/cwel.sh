@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>cwel.sh</title>
 <meta name="description" content="Connor Welsh, software developer in Arlington, VA.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%231e1e2e'/><text x='3' y='13' font-size='13' fill='%23fab387' font-family='monospace'>%E2%9D%AF</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%231e1e2e'/><text x='8' y='9' font-size='18' text-anchor='middle' dominant-baseline='central' fill='%2389b4fa' font-family='monospace'>~</text></svg>">
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 <main>
 <output id="out" role="log" aria-live="polite">
-<pre id="login" class="dim">Last login: {{login}} from localhost</pre>
+<pre id="login" class="dim" data-built="{{built}}">Last login: {{login}} from localhost</pre>
 <pre id="about">Connor Welsh. Software developer in Arlington, VA.
 Emails from here are me.</pre>
 <pre class="cmd"><span class="d">~</span>
@@ -25,6 +25,7 @@ Emails from here are me.</pre>
 <p id="hint" class="dim">type <span class="c">help</span>, or just use the links.</p>
 </main>
 <template id="man">{{man}}</template>
+<script src="/logos.js"></script>
 <script src="/shell.js"></script>
 </body>
 </html>

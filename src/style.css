@@ -4,10 +4,12 @@
   --yellow: #f9e2af; --mauve: #cba6f7; --surface: #313244;
   color-scheme: dark;
 }
+@font-face { font-family: nf; src: url(/nf.woff2) format("woff2"); unicode-range: U+E000-F8FF, U+F0000-FFFFD; font-display: block; }
+@font-face { font-family: braille; src: url(/braille.woff2) format("woff2"); unicode-range: U+2800-28FF; font-display: block; }
 html { background: var(--base); color: var(--text); }
 body {
   margin: 0; padding: 2rem 1rem 4rem; max-width: 80ch; margin-inline: auto;
-  font: 1rem/1.5 ui-monospace, monospace;
+  font: 1rem/1.5 ui-monospace, monospace, nf, braille;
 }
 pre { font: inherit; margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 a { color: var(--blue); text-decoration: none; }
@@ -32,6 +34,8 @@ input {
   padding: 0; margin: 0; caret-color: var(--peach); caret-shape: block;
 }
 output { display: block; }
+.logo, .fetch { display: inline-block; vertical-align: top; }
+.logo { margin-right: 3ch; line-height: 1.25; }
 #hint { margin: 1lh 0 0; }
 
 .resume { max-width: 72ch; font-family: system-ui, sans-serif; }
