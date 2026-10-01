@@ -62,7 +62,9 @@ with tempfile.TemporaryDirectory() as d:
     txt = files["index.txt"].read_text()
     for line in txt.splitlines():
         assert len(build.STRIP.sub("", line)) <= 80, line
-    assert "NAME" in txt and "SEE ALSO" in txt and "x & y" in txt
+    assert "NAME" in txt and "SEE ALSO" in txt
+    assert build.about_text((root / "src" / "index.html").read_text()) in txt
+    assert build.about_text('<pre id="about">x &amp; y</pre>') == "x & y"
     assert "cat patches" in txt
     assert "—" not in txt
 

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cwel.sh</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main>
+<pre class="cmd"><span class="d">~</span> <span class="p">❯</span> cd <span id="path">…</span></pre>
+<pre class="err">cd: no such file or directory: <span id="path2">…</span></pre>
+<pre><a href="/">~</a></pre>
+</main>
+<script>
+const p = location.pathname.replace(/[^\w./-]/g, '');
+for (const id of ['path', 'path2']) document.getElementById(id).textContent = p;
+</script>
+</body>
+</html>

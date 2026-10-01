@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cwel.sh</title>
+<meta name="description" content="Connor Welsh, software developer in Arlington, VA.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%231e1e2e'/><text x='3' y='13' font-size='13' fill='%23fab387' font-family='monospace'>%E2%9D%AF</text></svg>">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main>
+<output id="out" role="log" aria-live="polite">
+<pre class="cmd"><span class="d">~</span> <span class="p">❯</span> cat about</pre>
+<pre id="about">Connor Welsh. Software developer in Arlington, VA.
+Accessible web software, Salesforce, and patches to the
+Linux desktop when it breaks. Emails from here are me.</pre>
+<pre class="cmd"><span class="d">~</span> <span class="p">❯</span> ls</pre>
+<pre id="ls">{{ls}}</pre>
+</output>
+<form id="f" autocomplete="off">
+<span class="d">~</span>&nbsp;<span class="p">❯</span>&nbsp;<label class="sr" for="cmd">Command</label><input id="cmd" type="text" spellcheck="false" autocapitalize="off" aria-describedby="hint">
+</form>
+<p id="hint" class="dim">type <span class="c">help</span>, or just use the links.</p>
+</main>
+<template id="patches">{{patches}}</template>
+<template id="man">{{man}}</template>
+<script src="/shell.js"></script>
+</body>
+</html>
