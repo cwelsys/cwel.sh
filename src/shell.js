@@ -31,6 +31,12 @@ const files = {
   resume: `<a href="/resume">/resume</a>  <a href="/resume.pdf">/resume.pdf</a>`,
   pgp: `<a href="/cwel.asc">/cwel.asc</a>\ngpg --locate-keys ${esc(email)}`,
 };
+const USAGE = ['Usage: cwel [OPTION]', 'Open a link to Connor Welsh.', '',
+  ...[['resume', 'open the resume'], ['github', 'open the GitHub profile'], ['linkedin', 'open the LinkedIn profile'],
+    ['email', `send mail to ${esc(email)}`], ['pgp', 'display the OpenPGP public key'], ['help', 'display this help and exit'],
+  ].map(([o, d]) => `      ${`--${o}`.padEnd(13)}${d}`),
+  '', `Report bugs to: <a href="https://github.com/cwelsys/cwel.sh/issues/new">${esc(email)}</a>`,
+  'Full documentation <<a href="/cwel.1">https://cwel.sh/cwel.1</a>>', 'or available locally via: man cwel'].join('\n');
 const logo = `.----------.
 | <span class="d">~</span>        |
 | <span class="p">❯</span> <span class="c">▮</span>      |
@@ -75,16 +81,7 @@ async function fetch_() {
 }
 const cmds = {
   __proto__: null,
-  help: () => [
-    ['ls', "list what's here"],
-    ['cat FILE', `read a file: ${Object.keys(files).join(', ')}`],
-    ['cd NAME', `go there: ${Object.keys(links).join(', ')}`],
-    ['whoami', 'who this is'],
-    ['man cwel', 'the manual'],
-    ['fastfetch', 'system info'],
-    ['clear', 'clear the screen, or ctrl-l'],
-    ['help', 'this'],
-  ].map(([c, d]) => `<span class="c">${c.padEnd(10)}</span> ${esc(d)}`).join('\n'),
+  help: () => cmds.cwel(['--help']),
   ls: a => {
     const f = a.filter(x => x[0] === '-').join(''), all = f.includes('a');
     const A = (n, u) => `<a href="${u}">${n}</a>`;
@@ -101,7 +98,7 @@ const cmds = {
   cat: a => a.length ? a.map(f => files[f] ?? err(`cat: ${esc(f)}: No such file or directory`)).join('\n') : err('cat: missing file'),
   cd: a => { const t = (a[0] || '').replace(/(.)\/$/, '$1'); return !t || t === '~' ? null : links[t] ? go(links[t]) : t === '~/.config' || t === '.config' ? go(DOTS) : err(`cd: no such file or directory: ${esc(a[0])}`); },
   open: a => cmds.cd(a),
-  cwel: a => !a.length ? 'What?' : a[0].startsWith('--') && links[a[0].slice(2)] ? go(links[a[0].slice(2)]) : err(`cwel: unrecognized option '${esc(a[0])}'`),
+  cwel: a => !a.length ? 'What?' : a[0] === '--help' ? USAGE : a[0].startsWith('--') && links[a[0].slice(2)] ? go(links[a[0].slice(2)]) : err(`cwel: unrecognized option '${esc(a[0])}'\nTry 'cwel --help' for more information.`),
   jellyfin: () => go('https://jelly.cwel.sh'),
   plex: () => cmds.jellyfin(),
   seerr: () => go('https://req.cwel.sh'),
