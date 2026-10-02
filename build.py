@@ -134,7 +134,7 @@ def resume_html(resume):
     if ed:
         parts.append("<section><h2>Education</h2>" + "".join(
             "<article>" + _row(h(e["area"]), e["period"], _link(e["school"], e.get("website"))) + "</article>" for e in ed) + "</section>")
-    return PAGE.format(title=h(b["name"]) + " resume", description=h(f'Resume of {b["name"]}, {b["headline"].lower()} in {b["location"]}.'), body=head + "".join(parts))
+    return PAGE.format(title="Resume - " + h(b["name"]), description=h(f'Resume of {b["name"]}, {b["headline"].lower()} in {b["location"]}.'), body=head + "".join(parts))
 
 
 ANSI = {
