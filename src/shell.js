@@ -76,7 +76,6 @@ async function fetch_() {
 const cmds = {
   __proto__: null,
   help: () => [
-    ['help', 'this'],
     ['ls', "list what's here"],
     ['cat FILE', `read a file: ${Object.keys(files).join(', ')}`],
     ['cd NAME', `go there: ${Object.keys(links).join(', ')}`],
@@ -84,6 +83,7 @@ const cmds = {
     ['man cwel', 'the manual'],
     ['fastfetch', 'system info'],
     ['clear', 'clear the screen, or ctrl-l'],
+    ['help', 'this'],
   ].map(([c, d]) => `<span class="c">${c.padEnd(10)}</span> ${esc(d)}`).join('\n'),
   ls: a => {
     const f = a.filter(x => x[0] === '-').join(''), all = f.includes('a');
