@@ -71,7 +71,7 @@ async function fetch_() {
     ['shell', 'shell.js'], ['term', `${n} ${v}`.trim()], ['network', colo],
   ].map(([k, val], i) => [k, k, esc(val), HUES[i % HUES.length]]);
   rows.push(['colors', [...'colors'].map((ch, i) => `<span class="${HUES[i % HUES.length]}">${ch}</span>`).join(''),
-    '<span class="err">●</span> <span class="p">●</span> <span class="y">●</span> <span class="g">●</span> <span class="d">●</span> <span class="k">●</span>', 'd']);
+    '<span aria-hidden="true"><span class="err">●</span> <span class="p">●</span> <span class="y">●</span> <span class="g">●</span> <span class="d">●</span> <span class="k">●</span></span>', 'd']);
   const body = [
     `<span class="p">cwel</span>@<span class="p">${esc(location.hostname)}</span>`,
     '<span class="dim">-------------</span>',
