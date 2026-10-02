@@ -98,6 +98,7 @@ const cmds = {
   cat: a => a.length ? a.map(f => files[f] ?? err(`cat: ${esc(f)}: No such file or directory`)).join('\n') : err('cat: missing file'),
   cd: a => { const t = (a[0] || '').replace(/(.)\/$/, '$1'); return !t || t === '~' ? null : links[t] ? go(links[t]) : t === '~/.config' || t === '.config' ? go(DOTS) : err(`cd: no such file or directory: ${esc(a[0])}`); },
   open: a => cmds.cd(a),
+  'xdg-open': a => cmds.cd(a),
   cwel: a => !a.length ? 'What?' : a[0] === '--help' ? USAGE : a[0].startsWith('--') && links[a[0].slice(2)] ? go(links[a[0].slice(2)]) : err(`cwel: unrecognized option '${esc(a[0])}'\nTry 'cwel --help' for more information.`),
   jellyfin: () => go('https://jelly.cwel.sh'),
   plex: () => cmds.jellyfin(),
