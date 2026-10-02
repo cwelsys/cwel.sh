@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>cwel.sh</title>
 <meta name="description" content="Connor Welsh, software developer in Arlington, VA.">
+<meta name="theme-color" content="#1e1e2e">
 <link rel="icon" href="/favicon.svg">
 <link rel="stylesheet" href="/style.css">
 </head>
@@ -12,15 +13,20 @@
 <main>
 <output id="out" role="log" aria-live="polite">
 <pre id="login" class="dim" data-built="{{built}}">Last login: {{login}} from localhost</pre>
-<pre id="about">Connor Welsh. Software developer in Arlington, VA.
-Emails from here are me.</pre>
-<pre class="cmd"><span class="d">~</span>
-<span class="p">❯</span> ls</pre>
-<pre id="ls">{{ls}}</pre>
+<h1 id="banner" class="d"><span aria-hidden="true">               _      _
+ ____ __ _____| |  __| |_
+/ _\ V  V / -_) |_(_-&lt; ' \
+\__|\_/\_/\___|_(_)__/_||_|</span><span class="sr">cwel.sh</span></h1>
+<pre class="cmd"><span aria-hidden="true"><span class="d">~</span>
+<span class="p">❯</span></span> ls</pre>
+<pre id="ls" class="nav">{{ls}}</pre>
+<pre class="cmd"><span aria-hidden="true"><span class="d">~</span>
+<span class="p">❯</span></span> whoami</pre>
+<pre id="about">Connor Welsh</pre>
 </output>
 <pre class="d" aria-hidden="true">~</pre>
 <form id="f" autocomplete="off">
-<span class="p">❯</span>&nbsp;<label class="sr" for="cmd">Command</label><input id="cmd" type="text" spellcheck="false" autocapitalize="off" aria-describedby="hint">
+<span class="p" aria-hidden="true">❯</span>&nbsp;<label class="sr" for="cmd">Command</label><span id="line"><input id="cmd" type="text" spellcheck="false" autocapitalize="off" aria-describedby="hint"></span>
 </form>
 <p id="hint" class="dim">type <span class="c">help</span>, or just use the links.</p>
 </main>

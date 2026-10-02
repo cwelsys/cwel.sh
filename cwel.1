@@ -3,32 +3,46 @@
 .Os cwel.sh
 .Sh NAME
 .Nm cwel
-.Nd Connor Welsh, software developer
+.Nd open a link to Connor Welsh
 .Sh SYNOPSIS
 .Nm
-.Op Fl -resume
-.Op Fl -github
-.Op Fl -email
+.Op Fl -resume | -github | -linkedin | -email | -pgp
 .Sh DESCRIPTION
-Builds web software that works with a keyboard and a screen reader,
-and the tooling around it.
-Currently a contract developer at the Blind Institute of Technology.
+.Nm
+opens the link selected by its option in the user's web browser.
 .Pp
-Before that: Salesforce administration, project management,
-technical recruiting, and a few years running his own shop.
+The options are as follows:
+.Bl -tag -width Ds
+.It Fl -resume
+Open the resume.
+.It Fl -github
+Open the GitHub profile.
+.It Fl -linkedin
+Open the LinkedIn profile.
+.It Fl -email
+Open the user's preferred e-mail composer in order to send a mail to
+.Mt cwel@cwel.sh .
+.It Fl -pgp
+Display the OpenPGP public key.
+.El
 .Sh FILES
-.Bl -tag -width /resume.pdf -compact
+.Bl -tag -width Ds
 .It Pa /resume
-the long version
+Contains the resume as an HTML page.
 .It Pa /resume.pdf
-the same, for sending
+Contains the resume as a PDF document.
 .It Pa /cwel.asc
-OpenPGP public key
-.It Pa ~/.config
-dotfiles, github.com/cwelsys/dotfiles
+Contains the OpenPGP public key for
+.Mt cwel@cwel.sh .
+.It Pa ~/.config/
+This directory is the default location for user-specific configuration.
+Its contents are published at
+.Lk https://github.com/cwelsys/dotfiles .
 .El
 .Sh SEE ALSO
-.Lk https://github.com/cwelsys ,
-.Mt cwel@cwel.sh
+.Xr cat 1 ,
+.Xr cd 1 ,
+.Xr ls 1 ,
+.Xr man 1
 .Sh AUTHORS
 .An Connor Welsh Aq Mt cwel@cwel.sh

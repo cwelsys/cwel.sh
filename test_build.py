@@ -73,12 +73,15 @@ with tempfile.TemporaryDirectory() as d:
         assert len(build.STRIP.sub("", line)) <= 80, line
     assert "NAME" in txt and "SEE ALSO" in txt
     assert build.about_text((root / "src" / "index.html").read_text()) in txt
+    assert build.about_text((root / "src" / "index.html").read_text(), "motd") in txt and "❯\x1b[0m whoami" in txt
     assert build.about_text('<pre id="about">x &amp; y</pre>') == "x & y"
     assert "cat patches" not in txt and "keys" not in txt
     assert "Last login: " in txt and "from localhost" in txt
     html = files["index.html"].read_text()
-    assert "from localhost" in html and 'href="/cwel.asc">pgp</a>' in html and '<pre id="ls"><a href="/resume">resume</a>' in html
+    assert "from localhost" in html and 'href="/cwel.asc">pgp</a>' in html and '<pre id="ls" class="nav"><a href="/resume">resume</a>' in html and '<h1 id="banner"' in html
+    assert "|_(_-&lt; ' \\" in html and "|_(_-< ' \\" in txt
     assert "{{" not in html and "{{" not in txt
+    assert 'href="https://github.com/cwelsys/dotfiles"' in html and '."' not in "".join(re.findall(r'href="[^"]*"', html))
     assert re.search(r'data-built="\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ"', html)
     assert "\u2014" not in txt
 

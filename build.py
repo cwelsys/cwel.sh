@@ -61,8 +61,10 @@ PAGE = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
+<meta name="description" content="{description}">
+<meta name="theme-color" content="#1e1e2e">
 <link rel="icon" href="/favicon.svg">
-<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="/style.css">
 </head>
 <body class="resume">
 <main>
@@ -132,7 +134,7 @@ def resume_html(resume):
     if ed:
         parts.append("<section><h2>Education</h2>" + "".join(
             "<article>" + _row(h(e["area"]), e["period"], _link(e["school"], e.get("website"))) + "</article>" for e in ed) + "</section>")
-    return PAGE.format(title=h(b["name"]) + " resume", body=head + "".join(parts))
+    return PAGE.format(title=h(b["name"]) + " resume", description=h(f'Resume of {b["name"]}, {b["headline"].lower()} in {b["location"]}.'), body=head + "".join(parts))
 
 
 ANSI = {
@@ -165,8 +167,8 @@ def man_html(man):
             e = f'<span class="y">{e}</span>'
         elif "CWEL(1)" in line:
             e = f'<span class="k">{e}</span>'
-        e = re.sub(r"(https?://[^\s,]+)", r'<a href="\1">\1</a>', e)
-        e = re.sub(r"(?<![\w/])([\w.+-]+@[\w-]+\.[\w.]+)", r'<a href="mailto:\1">\1</a>', e)
+        e = re.sub(r"(https?://[^\s,]*[^\s,.])", r'<a href="\1">\1</a>', e)
+        e = re.sub(r"(?<![\w/])([\w.+-]+@[\w-]+(?:\.\w+)+)", r'<a href="mailto:\1">\1</a>', e)
         out.append(e)
     return "\n".join(out)
 
@@ -187,18 +189,26 @@ def ls_html(resume):
     return "  ".join(f'<a href="{h(L[n])}">{n}</a>' if n in L else n for n in LS)
 
 
-def about_text(index_html):
-    m = re.search(r'<pre id="about">(.*?)</pre>', index_html, re.S)
+def about_text(index_html, id="about"):
+    m = re.search(rf'<pre id="{id}">(.*?)</pre>', index_html, re.S)
     return text(m.group(1)) if m else ""
 
 
-def index_txt(resume, about, man, login):
+def banner_text(index_html):
+    m = re.search(r'id="banner"[^>]*><span aria-hidden="true">(.*?)</span>', index_html, re.S)
+    return html.unescape(m.group(1)).strip("\n") if m else ""
+
+
+def index_txt(resume, about, man, login, banner="", motd=""):
     L = links(resume)
     P = f'{ansi("blue", "~")}\n{ansi("peach", "❯")}'
     ls = "  ".join(ansi("blue", n) if n in L else n for n in LS)
     return "\n".join([
-        ansi("dim", f"Last login: {login} from localhost"), about,
+        ansi("dim", f"Last login: {login} from localhost"),
+        *([ansi("blue", ln) for ln in banner.splitlines()] + [""] if banner else []),
+        *([motd, ""] if motd else []),
         f"{P} ls", ls,
+        f"{P} whoami", about,
         f"{P} man cwel", man_txt(man),
         f"{P} ",
         "resume:   https://cwel.sh/resume",
@@ -243,7 +253,7 @@ def build(out=OUT, root=ROOT):
     built = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     page = index.replace("{{login}}", login).replace("{{built}}", built).replace("{{ls}}", ls_html(resume)).replace("{{man}}", man_html(man))
     (out / "index.html").write_text(page)
-    (out / "index.txt").write_text(index_txt(resume, about_text(index), man, login))
+    (out / "index.txt").write_text(index_txt(resume, about_text(index), man, login, banner_text(index), about_text(index, "motd")))
     (out / "resume" / "index.html").write_text(resume_html(resume))
     write_keys(out, resume["basics"]["email"], root)
 

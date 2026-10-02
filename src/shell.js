@@ -1,17 +1,30 @@
 const out = document.getElementById('out');
 const input = document.getElementById('cmd');
 const form = document.getElementById('f');
+const cur = document.createElement('span');
+cur.id = 'cur';
+cur.setAttribute('aria-hidden', 'true');
+input.before(cur);
+function caret() {
+  const i = input.selectionDirection === 'backward' ? input.selectionStart : input.selectionEnd;
+  cur.style.left = `calc(${i}ch - ${input.scrollLeft}px)`;
+  cur.style.animation = 'none';
+  void cur.offsetWidth;
+  cur.style.animation = '';
+}
+for (const ev of ['input', 'keydown', 'keyup', 'click', 'focus', 'select', 'scroll']) input.addEventListener(ev, () => requestAnimationFrame(caret));
 const tpl = id => document.getElementById(id).innerHTML.trim();
 const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const err = s => `<span class="err">${s}</span>`;
 const go = u => { location.href = u; return null; };
-const PROMPT = '<span class="d">~</span>\n<span class="p">❯</span>';
+const PROMPT = '<span aria-hidden="true"><span class="d">~</span>\n<span class="p">❯</span></span>';
 const login = document.getElementById('login');
 const BOOT = Date.parse(login.dataset.built) || Date.now();
 const colo = (/from (\S+)/.exec(login.textContent) || [])[1] || 'localhost';
 const links = { __proto__: null };
 for (const a of document.querySelectorAll('#ls a')) links[a.textContent] = a.getAttribute('href');
 const email = (links.email || '').replace('mailto:', '');
+const DOTS = 'https://github.com/cwelsys/dotfiles/tree/main/dot_config';
 const files = {
   __proto__: null,
   about: tpl('about'),
@@ -54,7 +67,7 @@ async function fetch_() {
   rows.push(['colors', [...'colors'].map((ch, i) => `<span class="${HUES[i % HUES.length]}">${ch}</span>`).join(''),
     '<span class="err">●</span> <span class="p">●</span> <span class="y">●</span> <span class="g">●</span> <span class="d">●</span> <span class="k">●</span>', 'd']);
   const body = [
-    `<span class="p">guest</span>@<span class="p">${esc(location.hostname)}</span>`,
+    `<span class="p">cwel</span>@<span class="p">${esc(location.hostname)}</span>`,
     '<span class="dim">-------------</span>',
     ...rows.map(([k, label, val, hue]) => `<span class="${hue}" aria-hidden="true">${ICONS[k]}</span> ${label}${' '.repeat(9 - k.length)}<span class="${hue}">${val}</span>`),
   ].join('\n');
@@ -67,15 +80,28 @@ const cmds = {
     ['ls', "list what's here"],
     ['cat FILE', `read a file: ${Object.keys(files).join(', ')}`],
     ['cd NAME', `go there: ${Object.keys(links).join(', ')}`],
+    ['whoami', 'who this is'],
     ['man cwel', 'the manual'],
     ['fastfetch', 'system info'],
     ['clear', 'clear the screen, or ctrl-l'],
   ].map(([c, d]) => `<span class="c">${c.padEnd(10)}</span> ${esc(d)}`).join('\n'),
-  ls: () => tpl('ls'),
+  ls: a => {
+    const f = a.filter(x => x[0] === '-').join(''), all = f.includes('a');
+    const A = (n, u) => `<a href="${u}">${n}</a>`;
+    if (!f.includes('l')) return `<span class="nav">${all ? `.  ..  ${A('.config', DOTS)}  ` : ''}${tpl('ls')}</span>`;
+    const d = new Date(BOOT), p = n => String(n).padStart(2, '0');
+    const when = `${d.toLocaleString('en-US', { month: 'short', timeZone: 'UTC' })} ${String(d.getUTCDate()).padStart(2)} ${p(d.getUTCHours())}:${p(d.getUTCMinutes())}`;
+    const rows = [
+      ...(all ? [['drwx------', 'cwel cwel', 70, '.'], ['drwxr-xr-x', 'root root', 28, '..'], ['drwxr-xr-x', 'cwel cwel', 2082, A('.config', DOTS)]] : []),
+      ...Object.keys(links).map(n => ['lrwxrwxrwx', 'cwel cwel', links[n].length, `${A(n, links[n])} -> ${esc(links[n])}`]),
+    ];
+    const w = Math.max(...rows.map(r => String(r[2]).length));
+    return ['total 0', ...rows.map(([m, o, s, n]) => `${m} 1 ${o} ${String(s).padStart(w)} ${when} ${n}`)].join('\n');
+  },
   cat: a => a.length ? a.map(f => files[f] ?? err(`cat: ${esc(f)}: No such file or directory`)).join('\n') : err('cat: missing file'),
-  cd: a => !a.length ? null : links[a[0]] ? go(links[a[0]]) : err(`cd: no such file or directory: ${esc(a[0])}`),
+  cd: a => { const t = (a[0] || '').replace(/(.)\/$/, '$1'); return !t || t === '~' ? null : links[t] ? go(links[t]) : t === '~/.config' || t === '.config' ? go(DOTS) : err(`cd: no such file or directory: ${esc(a[0])}`); },
   open: a => cmds.cd(a),
-  cwel: a => !a.length ? tpl('man') : a[0].startsWith('--') && links[a[0].slice(2)] ? go(links[a[0].slice(2)]) : err(`cwel: unrecognized option '${esc(a[0])}'`),
+  cwel: a => !a.length ? 'What?' : a[0].startsWith('--') && links[a[0].slice(2)] ? go(links[a[0].slice(2)]) : err(`cwel: unrecognized option '${esc(a[0])}'`),
   jellyfin: () => go('https://jelly.cwel.sh'),
   plex: () => cmds.jellyfin(),
   seerr: () => go('https://req.cwel.sh'),
@@ -83,15 +109,16 @@ const cmds = {
   man: a => !a.length ? "What manual page do you want?\nFor example, try 'man cwel'." : ['cwel', 'cwel.sh', 'man'].includes(a[0]) ? tpl('man') : err(`No manual entry for ${esc(a[0])}`),
   fastfetch: () => fetch_(),
   neofetch: () => fetch_(),
-  whoami: () => 'guest',
+  whois: a => !a.length ? 'Usage: whois [OPTION]... OBJECT...' : ['cwel.sh', 'cwel'].includes(a[0]) ? files.about : err('No whois server is known for this kind of object.'),
+  whoami: () => files.about,
   pwd: () => '/home/cwel',
   echo: a => esc(a.join(' ')),
   uname: async () => { const s = await sys(); return esc(`${s.server} ${s.host} ${s.proto}`); },
   clear: () => { out.innerHTML = ''; return null; },
-  sudo: () => err('guest is not in the sudoers file.  This incident will be reported.'),
+  sudo: () => err('cwel is not in the sudoers file.  This incident will be reported.'),
   rm: a => { const f = a.filter(x => !x.startsWith('-')); return err(f.length ? f.map(x => `rm: cannot remove '${esc(x)}': Permission denied`).join('\n') : "rm: missing operand\nTry 'rm --help' for more information."); },
   exit: () => { close(); for (const el of [form.previousElementSibling, form, document.getElementById('hint')]) el.remove(); return `Connection to ${esc(location.hostname)} closed.`; },
-  nvim: () => go('https://github.com/cwelsys/dotfiles/tree/main/dot_config/nvim'),
+  nvim: () => go(`${DOTS}/nvim`),
   vim: () => cmds.nvim(),
   vi: () => cmds.nvim(),
 };
